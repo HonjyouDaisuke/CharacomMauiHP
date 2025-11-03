@@ -1,0 +1,124 @@
+<!-- save as create_user.html -->
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Create User - CharacomMauiHP</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN",
+          "Segoe UI", Roboto;
+        padding: 20px;
+      }
+      label {
+        display: block;
+        margin-top: 8px;
+      }
+      input {
+        padding: 6px;
+        width: 100%;
+        max-width: 320px;
+      }
+      button {
+        margin-top: 12px;
+        padding: 8px 12px;
+      }
+      .msg {
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>新規ユーザ登録（JSON POST）</h1>
+
+    <form id="signup">
+      <label>
+        User Id
+        <input type="id" name="id" required />
+      </label>
+
+      <label>
+        Email
+        <input type="email" name="email" required />
+      </label>
+
+      <label>
+        Name
+        <input type="name" name="name" />
+      </label>
+
+      <label>
+        BoxId
+        <input type="name" name="boxid" />
+      </label>
+
+      <label>
+        BoxAccessToken
+        <input type="name" name="boxaccesstoken" />
+      </label>
+
+      <label>
+        BoxRefreshToken
+        <input type="name" name="boxrefreshtoken" />
+      </label>
+      <button type="submit">登録する</button>
+    </form>
+
+    <div class="msg" id="msg"></div>
+
+    <script>
+      (function () {
+        // 開発時と本番で切り替えてください
+        const endpoint =
+          "http://localhost:8888/CharacomMauiHP/api/create_user.php";
+        const form = document.getElementById("signup");
+        const msg = document.getElementById("msg");
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          msg.textContent = "送信中...";
+
+          const fd = new FormData(form);
+          const payload = {
+            email: fd.get("email").trim(),
+            id: fd.get("id"),
+            name: fd.get("name"),
+            box_user_id: fd.get("boxid"),
+            box_access_token: fd.get("boxaccesstoken"),
+            box_refresh_token: fd.get("boxrefreshtoken"),
+          };
+
+          try {
+            const res = await fetch(endpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+              credentials: "omit", // 必要なら 'include' に
+            });
+
+            if (!res.ok) {
+              msg.textContent = `通信エラー: ${res.status} ${res.statusText}`;
+              return;
+            }
+
+            const data = await res.json();
+            if (data.success) {
+              msg.textContent = "登録成功: " + (data.message || "");
+              form.reset();
+            } else {
+              msg.textContent =
+                "登録失敗: " + (data.message || JSON.stringify(data));
+            }
+          } catch (err) {
+            console.error(err);
+            msg.textContent =
+              "例外が発生しました。コンソールを確認してください。";
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

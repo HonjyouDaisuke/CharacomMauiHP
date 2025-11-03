@@ -15,19 +15,44 @@ class UserRepository
 
     public function create(User $user): bool
     {
-        $sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
+        $sql = file_get_contents(__DIR__ . '/../sql/create_user.sql');
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
-            ':email'    => $user->email,
-            ':password' => $user->password,
+            ':id' => $user->id,
+            ':name' => $user->name,
+            ':email' => $user->email,
+            ':picture_url' => $user->picture_url,
+            ':box_user_id' => $user->box_user_id,
+            ':box_access_token' => $user->box_access_token,
+            ':box_refresh_token' => $user->box_refresh_token,
+            ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s'),
+            ':role_id' => $user->role_id
         ]);
     }
 
-    public function exists(string $email): bool
+    public function update(User $user): bool
     {
-        $stmt = $this->db->prepare("SELECT id FROM users WHERE email=:email LIMIT 1");
-        $stmt->execute([':email' => $email]);
+        $sql = file_get_contents(__DIR__ . '/../sql/update_user.sql');
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $user->id,
+            ':name' => $user->name,
+            ':email' => $user->email,
+            ':picture_url' => $user->picture_url,
+            ':box_user_id' => $user->box_user_id,
+            ':box_access_token' => $user->box_access_token,
+            ':box_refresh_token' => $user->box_refresh_token,
+            ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s'),
+            ':role_id' => $user->role_id
+        ]);
+    }
+
+    public function exists(string $id): bool
+    {
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE id=:id LIMIT 1");
+        $stmt->execute([':id' => $id]);
 
         return $stmt->fetch() !== false;
     }
