@@ -1,0 +1,24 @@
+INSERT INTO users 
+  (
+    id,
+    name, 
+    email, 
+    picture_url, 
+    box_user_id, 
+    box_access_token, 
+    box_refresh_token, 
+    token_expires_at, 
+    role_id
+  ) 
+VALUES 
+  (
+    :id,
+    :name,
+    :email,
+    :picture_url,
+    :box_user_id,
+    :box_access_token,
+    :box_refresh_token,
+    :token_expires_at,
+    :role_id
+  );

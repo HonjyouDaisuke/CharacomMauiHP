@@ -7,7 +7,8 @@ class Database
 
     public function __construct($config)
     {
-        $dsn = "mysql:host={$config['db_host']};dbname={$config['db_name']};charset=utf8mb4";
+        // ポート指定を追加
+        $dsn = "mysql:host={$config['db_host']};port={$config['db_port']};dbname={$config['db_name']};charset=utf8mb4";
 
         $this->pdo = new \PDO(
             $dsn,

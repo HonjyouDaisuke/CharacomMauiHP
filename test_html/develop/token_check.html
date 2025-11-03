@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Token Check</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      textarea {
+        width: 100%;
+        height: 120px;
+      }
+      #result {
+        margin-top: 20px;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>アクセストークン検証</h2>
+
+    <label for="token">アクセストークン:</label><br />
+    <textarea
+      id="token"
+      placeholder="ここにアクセストークンを貼り付けてください"
+    ></textarea
+    ><br /><br />
+
+    <button onclick="checkToken()">検証する</button>
+
+    <div id="result"></div>
+
+    <script>
+      async function checkToken() {
+        const token = document.getElementById("token").value.trim();
+        const resultDiv = document.getElementById("result");
+
+        if (!token) {
+          resultDiv.innerHTML =
+            "<span style='color:red;'>トークンを入力してください。</span>";
+          return;
+        }
+
+        resultDiv.innerHTML = "検証中...";
+
+        try {
+          const res = await fetch(
+            "http://localhost:8888/CharacomMauiHP/api/check_user.php",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ token }),
+            }
+          );
+
+          const data = await res.json();
+
+          if (data.success) {
+            resultDiv.innerHTML = `
+              ✅ 有効なトークンです<br>
+              <strong>ユーザーID:</strong> ${data.userId}
+            `;
+          } else {
+            resultDiv.innerHTML = `
+              ❌ 無効なトークン<br>
+              <strong>理由:</strong> ${data.error}
+            `;
+          }
+        } catch (err) {
+          resultDiv.innerHTML = `<span style='color:red;'>通信エラーが発生しました。</span>`;
+        }
+      }
+    </script>
+  </body>
+</html>
