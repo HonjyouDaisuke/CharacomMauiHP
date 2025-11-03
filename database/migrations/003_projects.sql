@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS projects;
+
+CREATE TABLE projects (
+    id CHAR(36) NOT NULL PRIMARY KEY DEFAULT (UUID()),
+    title VARCHAR(255),
+    description VARCHAR(512),
+    folder_id VARCHAR(30),
+    chara_folder_id VARCHAR(30),
+    created_by CHAR(36),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
