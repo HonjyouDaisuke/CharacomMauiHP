@@ -1,6 +1,8 @@
 <?php
 namespace Backend\Application;
 
+require_once __DIR__ . '/../../backend/vendor/autoload.php';
+
 use Backend\Infrastructure\UserRepository;
 use Backend\Infrastructure\OpenSSLEncryptionService;
 

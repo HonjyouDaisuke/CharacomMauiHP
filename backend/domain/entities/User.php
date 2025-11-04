@@ -1,5 +1,5 @@
 <?php
-namespace Backend\Domain;
+namespace Backend\Domain\Entities;
 
 use DateTime;
 

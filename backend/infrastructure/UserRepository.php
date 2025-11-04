@@ -1,11 +1,9 @@
 <?php
 namespace Backend\Infrastructure;
 
-require_once __DIR__ . '/../domain/entities/User.php';
-require_once __DIR__ . '/../domain/EncryptionServiceInterface.php';
+require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
-
-use Backend\Domain\User;
+use Backend\Domain\Entities\User;
 use Backend\Domain\EncryptionServiceInterface;
 
 use PDO;

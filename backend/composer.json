@@ -1,0 +1,11 @@
+{
+  "name": "characom/backend",
+  "description": "Backend code",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Backend\\": "./"
+    }
+  },
+  "require": {}
+}
