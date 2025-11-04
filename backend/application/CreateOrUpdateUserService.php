@@ -1,8 +1,6 @@
 <?php
 namespace Backend\Application;
 
-require_once __DIR__ . '/../../backend/vendor/autoload.php';
-
 use Backend\Domain\Entities\User;
 use Backend\Infrastructure\UserRepository;
 

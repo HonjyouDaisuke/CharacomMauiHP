@@ -1,8 +1,6 @@
 <?php
 namespace Backend\Infrastructure;
 
-require_once __DIR__ . '/../../backend/vendor/autoload.php';
-
 use Backend\Domain\EncryptionServiceInterface;
 
 class OpenSSLEncryptionService implements EncryptionServiceInterface
