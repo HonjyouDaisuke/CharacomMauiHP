@@ -20,10 +20,12 @@ $globalSettingService = new GetGlobalSettingService($db);
 $userInfo = $userInfoService->GetUserId($token);
 
 if (!$userInfo['success']) {
+  header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'succeess' => false,
     'message'  => "invalid user info",
   ]);
+  exit;
 }
 
 $globalSettings = $globalSettingService->GetGlobalSetting();
