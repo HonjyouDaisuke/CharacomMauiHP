@@ -9,6 +9,7 @@ use Backend\Application\GetBoxFolderItemsService;
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
 $token = $data['token'] ?? '';
+$requestedFolderId = $data['folder_id'] ?? null;
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // DBインスタンス
@@ -40,12 +41,12 @@ $res['standardFolderId'] = $globalSettings['standardFolder'];
 $res['strokeFolderId'] = $globalSettings['strokeFolder'];
 
 $accessToken = $userInfo['boxAccessToken'];
-$topFolderId = $globalSettings['topFolder'];
+
 // ✅ UseCase（Application）
 $usecase = new GetBoxFolderItemsService();
-
 // ✅ 実行
-$folderList = $usecase->execute($accessToken, $topFolderId);
+$folderId = $requestedFolderId ?: $globalSettings['topFolder'];
+$folderList = $usecase->execute($accessToken, $folderId);
 
 $res['folderItems'] = $folderList['data']['entries'];
 
