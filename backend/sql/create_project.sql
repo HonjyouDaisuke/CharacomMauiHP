@@ -1,5 +1,6 @@
-INSERT INTO users 
+INSERT INTO projects 
   (
+    id,
     name, 
     description, 
     folder_id, 
@@ -8,6 +9,7 @@ INSERT INTO users
   ) 
 VALUES 
   (
+    :id,
     :name,
     :description,
     :folder_id,

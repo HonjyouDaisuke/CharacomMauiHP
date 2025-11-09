@@ -16,17 +16,30 @@ class CreateOrUpdateProjectService
     public function execute(Project $_project): array
     {
         // 存在チェック
-        $id = $this->repo->exists($_project->name);
-        if ($id) {
-          $_project->id = $id;
-          $success = $this->repo->update($_project);
-        }else{
-          $success = $this->repo->create($_project);
+        $existingId = $this->repo->exists($_project->name);
+
+        if ($existingId !== null) {
+            // UPDATE
+            $_project->id = $existingId;
+            $res = $this->repo->update($_project);
+        } else {
+            // CREATE
+            $res = $this->repo->create($_project);
+        }
+
+        // 成功判定
+        if ($res === "") {
+            return [
+                'success' => false,
+                'message' => 'Failed to create or update project.',
+                'id' => "",
+            ];
         }
 
         return [
-            'success' => $success,
-            'message' => $success ? 'User created successfully.' : 'Failed to create user.'
+            'success' => true,
+            'message' => 'Project processed successfully.',
+            'id' => $res, // ← create/update で返ってきた ID をそのまま返す
         ];
     }
 }
