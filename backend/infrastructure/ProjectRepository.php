@@ -66,5 +66,28 @@ class ProjectRepository
       // 見つからなかった → null
       return null;
     }
+    
+    public function getProjectInfo(string $projectId): ?Project
+    {
+      $stmt = $this->db->prepare("SELECT * FROM projects WHERE id = :project_id LIMIT 1");
+      $stmt->execute([':project_id' => $projectId]);
 
+      $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+      
+      // 見つからなかったら null を返す
+      if (!$row) {
+          return null;
+      }
+
+      // 見つかったので Project オブジェクトを作って返す
+      return new Project(
+          id: $row['id'],
+          name: $row['name'],
+          description: $row['description'],
+          project_folder_id: $row['folder_id'],
+          chara_folder_id: $row['chara_folder_id'],
+          created_by: $row['created_by']
+          // created_at, updated_at を使うなら追加可能
+      ); 
+    }
 }

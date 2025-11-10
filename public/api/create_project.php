@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
 use Backend\Application\CreateOrUpdateCharaDataService;
 use Backend\Application\CreateOrUpdateProjectService;
+use Backend\Application\CreateUserProjectsService;
 use Backend\Application\GetBoxFolderItemsService;
 use Backend\Infrastructure\Database;
 use Backend\Application\GetGlobalSettingService;
@@ -10,6 +11,7 @@ use Backend\Application\GetUserInfoService;
 use Backend\Infrastructure\ProjectRepository;
 use Backend\Domain\Entities\Project;
 use Backend\Infrastructure\CharaDataRepository;
+use Backend\Infrastructure\UserProjectsRepository;
 
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
@@ -82,5 +84,11 @@ $items = $boxFolderItems->execute($accessToken, $charaFolderId);
 $charaDataRepo = new CharaDataRepository($db);
 $insertCharaDataUseCase = new CreateOrUpdateCharaDataService($charaDataRepo);
 $res = $insertCharaDataUseCase->execute($items, $projectId, $userId);
+
+// User Projects にオーナーとして追加
+$userProjectsRepo = new UserProjectsRepository($db);
+$createUserProjectsUseCase = new CreateUserProjectsService($userProjectsRepo);
+$res = $createUserProjectsUseCase->execute($userId, $projectId);
+
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode($res);

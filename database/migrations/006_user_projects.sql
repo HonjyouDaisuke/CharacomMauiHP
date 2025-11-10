@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS user_projects;
+
+CREATE TABLE user_projects (
+    id CHAR(36) NOT NULL PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36),
+    project_id VARCHAR(36),
+    project_role_id VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

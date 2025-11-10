@@ -14,6 +14,6 @@ class GetBoxFolderItemsService
 
     public function execute(string $accessToken, string $folderId): array
     {
-        return $this->repo->getFolderItems($accessToken, $folderId);
+        return $this->repo->getAllFolderItems($accessToken, $folderId);
     }
 }

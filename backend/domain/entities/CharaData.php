@@ -11,6 +11,7 @@ class CharaData
         public string $chara_name = "",
         public string $times_name = "",
         public string $created_by = "",
+        public string $updated_by = "",
         public bool $is_selected = false
     ){
 

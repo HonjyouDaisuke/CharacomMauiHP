@@ -18,7 +18,7 @@ class CreateOrUpdateCharaDataService
   {
     $msg = "";
     // entries 分だけ1件ずつ呼び出す
-    foreach ($items['data']['entries'] as $folderItem) {
+    foreach ($items['data'] as $folderItem) {
       $fileInfo = FileNameService::getDataInfo($folderItem['name']);
       
       if ($fileInfo === null) {
@@ -33,14 +33,34 @@ class CreateOrUpdateCharaDataService
         chara_name: $fileInfo->CharaName,
         times_name: $fileInfo->TimesName,
         created_by: $userId,
+        updated_by: $userId,
         is_selected: false
       );
       
-      $success = $this->repo->insert($charaData);
-      if ($success)
+      $id = $this->repo->isExists($charaData);
+
+      // $idが存在しなかったら、新規なので追加(insert)
+      if ($id === null )
       {
+        $success = $this->repo->insert($charaData);
+        if (!$success)
+        {
+          $msg .= "[failed]".$folderItem['name']."\n";
+          continue;
+        }
         $msg .= "[success]".$folderItem['name']."\n";
+        continue;
       }
+      
+      // $idが存在したら、更新処理
+      $success = $this->repo->update($charaData, $id);
+      if (!$success)
+      {
+        $msg .= "[update failed]".$folderItem['name']."\n";
+        continue;
+      }
+      $msg .= "[updated]".$folderItem['name']."\n";
+        
     }
     
     return [

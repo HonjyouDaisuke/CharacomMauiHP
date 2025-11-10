@@ -48,7 +48,7 @@ $usecase = new GetBoxFolderItemsService();
 $folderId = $requestedFolderId ?: $globalSettings['topFolder'];
 $folderList = $usecase->execute($accessToken, $folderId);
 
-$res['folderItems'] = $folderList['data']['entries'];
+$res['folderItems'] = $folderList['data'];
 
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode($res);

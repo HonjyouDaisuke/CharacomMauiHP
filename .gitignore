@@ -1,3 +1,4 @@
 /.DS_Store
 /backend/config/env.php
 /backend/config/env.local.php
+/backend/vendor/
