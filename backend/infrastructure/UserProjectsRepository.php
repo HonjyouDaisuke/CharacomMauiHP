@@ -45,10 +45,11 @@ class UserProjectsRepository
     
     public function getUserProjects(string $userId): ?array
     {
-      $stmt = $this->db->prepare("SELECT project_id FROM user_projects WHERE user_id = :user_id");
+      $sql = file_get_contents(__DIR__ . '/../sql/get_user_projects.sql');
+      $stmt = $this->db->prepare($sql);
       $stmt->execute([':user_id' => $userId]);
-
-      $rows = $stmt->fetch(\PDO::FETCH_ASSOC);
+      
+      $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
       
       // 見つからなかったら null
       if (empty($rows)) {
@@ -57,5 +58,16 @@ class UserProjectsRepository
 
       // 見つかったので project_id のリストを返す
       return $rows;
+    }
+
+    public function getUserProjectsInfo(string $userId): ?array
+    {
+      $sql = file_get_contents(__DIR__ . '/../sql/get_user_projects_info.sql');
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([':user_id' => $userId]);
+
+      $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      return $projects;
     }
 }
