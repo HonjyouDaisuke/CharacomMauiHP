@@ -16,5 +16,15 @@ $userInfoService = new GetUserInfoService($db, $config);
 
 $userInfo = $userInfoService->GetUserId($token);
 
+if ($userInfo === null)
+{
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'success' => false,
+    'message' => "invalid token",
+  ]);
+  exit;
+}
+
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode($userInfo);

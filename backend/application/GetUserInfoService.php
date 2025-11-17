@@ -6,6 +6,7 @@ use Backend\Infrastructure\UserRepository;
 use Backend\Infrastructure\OpenSSLEncryptionService;
 use Backend\Application\ValidateTokenService;
 use Backend\Application\BoxTokenService;
+use Backend\Domain\Entities\User;
 
 class GetUserInfoService
 {
@@ -48,5 +49,10 @@ class GetUserInfoService
             'boxAccessToken'   => $tokens['access_token'] ?? null,
             'boxRefreshToken'  => $tokens['refresh_token'] ?? null
         ];
+    }
+
+    public function GetUserInfo(string $userId): ?User
+    {
+      return  $this->repo->getById($userId);
     }
 }

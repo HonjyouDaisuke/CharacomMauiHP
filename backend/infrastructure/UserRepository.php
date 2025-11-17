@@ -3,6 +3,7 @@ namespace Backend\Infrastructure;
 
 use Backend\Domain\Entities\User;
 use Backend\Domain\EncryptionServiceInterface;
+use Backend\Infrastructure\Box\BoxAvatarUrlRepository;
 
 use PDO;
 

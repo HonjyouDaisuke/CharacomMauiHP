@@ -13,6 +13,7 @@ $config = require __DIR__ . '/../../backend/config/env.local.php';
 // ✅ 必要ファイル読込
 require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
+use Backend\Application\BoxTokenService;
 use Backend\Application\CreateOrUpdateUserService;
 use Backend\Application\GenerateTokenService;
 use Backend\Infrastructure\Database;
