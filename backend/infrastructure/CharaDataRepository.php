@@ -57,4 +57,17 @@ class CharaDataRepository
       // 正常系：id を返す
       return $row['id'];
     }
+
+    public function GetProjectCharaItems(string $projectId): ?array
+    {
+      $sql = file_get_contents(__DIR__ . '/../sql/get_project_chara_items.sql');
+      $stmt = $this->db->prepare($sql);
+      
+      if (!$stmt->execute([':project_id' => $projectId]))
+      {
+        return null;
+      }
+      
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
