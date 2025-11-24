@@ -24,7 +24,7 @@ $userInfo = $userInfoService->GetUserId($token);
 header('Content-Type: application/json; charset=utf-8');
 if (!$userInfo['success']) {
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "invalid user info",
   ]);
   exit;
@@ -36,7 +36,7 @@ $userInfo = $userInfoService->GetUserInfo($userId);
 if ($userInfo === null)
 {
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "invalid user info",
   ]);
   exit;
