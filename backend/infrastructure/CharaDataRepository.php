@@ -70,4 +70,28 @@ class CharaDataRepository
       
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function UpdateSelectedChara(string $id, string $userId, bool $isSelected): bool
+    {
+      // charaIdがあるかどうか確認
+      $stmt = $this->db->prepare("SELECT id FROM chara_data WHERE id=:id LIMIT 1");
+      $stmt->execute([':id' => $id]);
+      
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      // 見つからなかったらすぐ null を返す（異常系）
+      if ($row === false || !isset($row['id'])) {
+          return false;
+      }
+
+      $sql = file_get_contents(__DIR__ . '/../sql/update_selected_chara.sql');
+      $stmt = $this->db->prepare($sql);
+      
+      $isSelected = $isSelected ? 1 : 0;
+      return $stmt->execute([
+        ':id' => $id,
+        ':is_selected' => $isSelected,
+        ':updated_by' => $userId,
+      ]);
+    }
 }

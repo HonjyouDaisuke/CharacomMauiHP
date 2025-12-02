@@ -1,49 +1,54 @@
 <?php
 require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
-use Backend\Application\FetchUserAvatar;
 use Backend\Infrastructure\Database;
+use Backend\Application\GetGlobalSettingService;
+use Backend\Application\GetStrokeFileId;
 use Backend\Application\GetUserInfoService;
-use Backend\Infrastructure\Box\BoxAvatarUrlRepository;
+use Backend\Application\GetUserProjectsService;
+use Backend\Infrastructure\StrokeMasterRepository;
+use Backend\Infrastructure\UserProjectsRepository;
 
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
 $token = $data['token'] ?? '';
+$charaName = $data['chara_name'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // DBインスタンス
 $db = new Database($config);
 
 // User認証 & User情報取得
+// UseCase
 $userInfoService = new GetUserInfoService($db, $config);
+$globalSettingService = new GetGlobalSettingService($db);
 $userInfo = $userInfoService->GetUserId($token);
 
 header('Content-Type: application/json; charset=utf-8');
 if (!$userInfo['success']) {
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "invalid user info",
   ]);
   exit;
 }
 
 $userId = $userInfo['userId'];
-$userInfo = $userInfoService->GetUserInfo($userId);
 
-if ($userInfo === null || empty($userInfo->picture_url))
+$repo = new StrokeMasterRepository($db);
+$usecase = new GetStrokeFileId($repo);
+$fileId = $usecase->execute($charaName);
+
+if ($fileId === null)
 {
   echo json_encode([
-    'succeess' => false,
-    'message'  => "user id can't fetch picture_url userId = {$userId}",
+    'success' => false,
+    'message'  => "file id not found",
   ]);
   exit;
 }
 
-//var_dump($userInfo->picture_url);
-
-// Boxアバター取得
-$avatarRepo = new BoxAvatarUrlRepository();
-$avatarUseCase = new FetchUserAvatar($avatarRepo);
-$res = $avatarUseCase->FetchAvaterImage($userInfo->picture_url, $userInfo->box_access_token);
-
-echo json_encode($res);
+echo json_encode([
+  'success' => true,
+  'file_id' => $fileId,
+], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

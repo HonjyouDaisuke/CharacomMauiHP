@@ -11,7 +11,7 @@ class FetchUserAvatar
     $this->repo = $repo;
   }
 
-  public function FetchAvaterImage(string $avatarUrl, string $accessToken): ?array
+  public function FetchAvaterImage(string $avatarUrl, string $accessToken): array
   {
     return $this->repo->GetAvatarImage($avatarUrl, $accessToken);
   }

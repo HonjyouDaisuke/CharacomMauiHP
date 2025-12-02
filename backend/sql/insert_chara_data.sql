@@ -4,7 +4,8 @@ INSERT INTO chara_data
     file_id, 
     material_name, 
     chara_name,
-    times_name, 
+    times_name,
+    is_selected,
     created_by
   ) 
 VALUES 
@@ -14,5 +15,6 @@ VALUES
     :material_name,
     :chara_name,
     :times_name,
+    false,
     :created_by
   );

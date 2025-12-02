@@ -1,0 +1,1 @@
+SELECT file_id FROM stroke_master WHERE chara_name = :chara_name
