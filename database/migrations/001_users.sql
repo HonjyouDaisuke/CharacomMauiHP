@@ -9,7 +9,7 @@ CREATE TABLE users (
     box_access_token TEXT,
     box_refresh_token TEXT,
     token_expires_at DATETIME,
-    role_id VARCHAR(255),
+    role_id CHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

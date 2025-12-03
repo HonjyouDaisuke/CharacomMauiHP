@@ -1,0 +1,1 @@
+SELECT * FROM global_setting LIMIT 1

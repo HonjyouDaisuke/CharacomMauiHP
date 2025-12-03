@@ -11,20 +11,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit;
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // ✅ 必要ファイル読込
-require_once __DIR__ . '/../../backend/domain/entities/User.php';
-require_once __DIR__ . '/../../backend/application/CreateOrUpdateUserService.php';
-require_once __DIR__ . '/../../backend/application/GenerateTokenService.php';
-require_once __DIR__ . '/../../backend/infrastructure/Database.php';
-require_once __DIR__ . '/../../backend/infrastructure/UserRepository.php';
-require_once __DIR__ . '/../../backend/domain/EncryptionServiceInterface.php';
-require_once __DIR__ . '/../../backend/infrastructure/OpenSSLEncryptionService.php';
+require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
+use Backend\Application\BoxTokenService;
 use Backend\Application\CreateOrUpdateUserService;
 use Backend\Application\GenerateTokenService;
 use Backend\Infrastructure\Database;
 use Backend\Infrastructure\UserRepository;
 use Backend\Infrastructure\OpenSSLEncryptionService;
-use Backend\Domain\User;
+use Backend\Domain\Entities\User;
 
 // ✅ JSON入力読み取り
 $input = json_decode(file_get_contents('php://input'), true);

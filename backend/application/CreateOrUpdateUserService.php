@@ -1,7 +1,7 @@
 <?php
 namespace Backend\Application;
 
-use Backend\Domain\User;
+use Backend\Domain\Entities\User;
 use Backend\Infrastructure\UserRepository;
 
 class CreateOrUpdateUserService

@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS project_roles;
+
+CREATE TABLE project_roles (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    name VARCHAR(255),
+    description VARCHAR(512),
+    level int,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

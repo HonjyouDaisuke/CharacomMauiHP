@@ -47,7 +47,7 @@
 
         try {
           const res = await fetch(
-            "http://localhost:8888/CharacomMauiHP/api/check_user.php",
+            "http://localhost:8888/CharacomMauiHP/api/get_folder_items.php",
             {
               method: "POST",
               headers: {
@@ -60,10 +60,27 @@
           const data = await res.json();
 
           if (data.success) {
-            resultDiv.innerHTML = `
-              ✅ 有効なトークンです<br>
-              <strong>ユーザーID:</strong> ${data.userId}
-            `;
+            let html = `
+    ✅ 有効なトークンです<br>
+    <strong>ユーザーID:</strong> ${data.userId}
+    <h3>フォルダ一覧</h3>
+  `;
+
+            if (
+              Array.isArray(data.folderItems) &&
+              data.folderItems.length > 0
+            ) {
+              data.folderItems.forEach((item) => {
+                html += `
+        📁 <strong>${item.name}</strong><br>
+        ID: ${item.id}<br><br>
+      `;
+              });
+            } else {
+              html += "<p>フォルダがありません。</p>";
+            }
+
+            resultDiv.innerHTML = html;
           } else {
             resultDiv.innerHTML = `
               ❌ 無効なトークン<br>

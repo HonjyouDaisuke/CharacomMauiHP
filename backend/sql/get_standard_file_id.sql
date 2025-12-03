@@ -1,0 +1,1 @@
+SELECT file_id FROM standard_master WHERE chara_name = :chara_name

@@ -1,0 +1,20 @@
+INSERT INTO chara_data 
+  (
+    project_id, 
+    file_id, 
+    material_name, 
+    chara_name,
+    times_name,
+    is_selected,
+    created_by
+  ) 
+VALUES 
+  (
+    :project_id,
+    :file_id,
+    :material_name,
+    :chara_name,
+    :times_name,
+    false,
+    :created_by
+  );

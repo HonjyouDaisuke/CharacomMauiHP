@@ -1,5 +1,5 @@
 <?php
-namespace Backend\Domain;
+namespace Backend\Domain\Entities;
 
 use DateTime;
 
@@ -11,7 +11,7 @@ class User
         public string $id,
         public string $name = "",
         public string $email = "",
-        public string $picture_url = "",
+        public ?string $picture_url = "",
         public string $box_user_id = "",
         public string $box_access_token = "",
         public string $box_refresh_token = "",
