@@ -2,6 +2,8 @@ SELECT
     p.id AS project_id,
     p.name,
     p.description,
+    p.chara_folder_id,
+    p.folder_id,
     COUNT(DISTINCT cd.id) AS chara_count,
     COUNT(DISTINCT up2.user_id) AS user_count
 FROM user_projects up
@@ -12,5 +14,5 @@ LEFT JOIN chara_data cd
 LEFT JOIN user_projects up2
     ON up2.project_id = p.id
 WHERE up.user_id = :user_id
-GROUP BY p.id, p.name, p.description
+GROUP BY p.id, p.name, p.description, p.chara_folder_id, p.folder_id
 ORDER BY p.created_at DESC;
