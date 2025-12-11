@@ -2,6 +2,8 @@ SELECT
     p.id AS project_id,
     p.name,
     p.description,
+    p.chara_folder_id,
+    p.folder_id,
     COUNT(DISTINCT cd.id) AS chara_count,
     COUNT(DISTINCT up2.user_id) AS user_count
 FROM user_projects up
