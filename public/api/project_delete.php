@@ -2,15 +2,15 @@
 require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
 use Backend\Infrastructure\Database;
-use Backend\Application\GetUserInfoService;
-use Backend\Application\UpdateSelectedCharaService;
+use Backend\Infrastructure\ProjectRepository;
 use Backend\Infrastructure\CharaDataRepository;
+use Backend\Infrastructure\UserProjectsRepository;
+use Backend\Application\DeleteProjectService;
 
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
 $token = $data['token'] ?? '';
-$id = $data['chara_id'] ?? '';
-$isSelected = $data['is_selected'] ?? false;
+$projectId = $data['project_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
@@ -27,25 +27,29 @@ if (!$token)
 // DBインスタンス
 $db = new Database($config);
 
-// UseCase
-$userInfoService = new GetUserInfoService($db, $config);
-$userInfo = $userInfoService->GetUserId($token);
+// 削除するテーブルのリポジトリ
+$projectRepo = new ProjectRepository($db);
+$userProjectsRepo = new UserProjectsRepository($db);
+$charaDataRepo = new CharaDataRepository($db);
 
-if (!$userInfo['success']) {
+$usecase = new DeleteProjectService(
+    $projectRepo,
+    $userProjectsRepo,
+    $charaDataRepo
+);
+
+$res = $usecase->execute($projectId);
+
+if (!$res) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "プロジェクトの削除でエラーが出ました projectId:".$projectId,
   ]);
   exit;
 }
-
-$userId = $userInfo['userId'];
-
-// stroke_masterに保存
-$charaDataRepo = new CharaDataRepository($db);
-$updateCharaSelectedService = new UpdateSelectedCharaService($charaDataRepo);
-$res = $updateCharaSelectedService->execute($id, $userId, $isSelected);
-
 header('Content-Type: application/json; charset=utf-8');
-echo json_encode($res);
+echo json_encode([
+    'success' => true,
+    'message'  => "プロジェクトを削除しました projectId:".$projectId,
+]);

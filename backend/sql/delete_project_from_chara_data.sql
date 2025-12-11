@@ -1,0 +1,1 @@
+DELETE FROM chara_data WHERE project_id = :project_id;

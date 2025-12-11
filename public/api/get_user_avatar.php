@@ -21,7 +21,7 @@ $userInfo = $userInfoService->GetUserId($token);
 header('Content-Type: application/json; charset=utf-8');
 if (!$userInfo['success']) {
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "invalid user info",
   ]);
   exit;
@@ -33,7 +33,7 @@ $userInfo = $userInfoService->GetUserInfo($userId);
 if ($userInfo === null || empty($userInfo->picture_url))
 {
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "user id can't fetch picture_url userId = {$userId}",
   ]);
   exit;

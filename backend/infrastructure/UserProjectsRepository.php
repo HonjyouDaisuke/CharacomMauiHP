@@ -70,4 +70,14 @@ class UserProjectsRepository
 
       return $projects;
     }
+
+    public function deleteByProjectId(string $projectId): bool
+    {
+        $sql = file_get_contents(__DIR__ . '/../sql/delete_project_form_user_projects.sql');
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':project_id' => $projectId
+        ]);
+    }
 }

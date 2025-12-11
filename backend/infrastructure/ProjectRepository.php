@@ -90,4 +90,31 @@ class ProjectRepository
           // created_at, updated_at を使うなら追加可能
       ); 
     }
+
+    public function deleteByProjectId(string $projectId): bool
+    {
+        $sql = file_get_contents(__DIR__ . '/../sql/delete_project_from_projects.sql');
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':project_id' => $projectId
+        ]);
+    }
+    
+    public function beginTransaction(): void
+    {
+        $this->db->beginTransaction();
+    }
+
+    public function commit(): void
+    {
+        $this->db->commit();
+    }
+
+    public function rollBack(): void
+    {
+        $this->db->rollBack();
+    }
+
+
 }
