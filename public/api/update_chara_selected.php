@@ -18,7 +18,7 @@ if (!$token)
 {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "入力チェックでエラーが出ました invalid user info token:".$token." proFol:".$projectFolderId,
   ]);
   exit;
@@ -34,7 +34,7 @@ $userInfo = $userInfoService->GetUserId($token);
 if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
-    'succeess' => false,
+    'success' => false,
     'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
   ]);
   exit;

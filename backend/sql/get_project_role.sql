@@ -1,0 +1,1 @@
+SELECT project_role_id FROM user_projects WHERE user_id = :user_id AND project_id = :project_id;

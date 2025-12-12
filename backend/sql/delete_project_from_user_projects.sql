@@ -1,0 +1,1 @@
+DELETE FROM user_projects WHERE project_id = :project_id;

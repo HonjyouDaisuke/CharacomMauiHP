@@ -70,4 +70,30 @@ class UserProjectsRepository
 
       return $projects;
     }
+
+    public function deleteByProjectId(string $projectId): bool
+    {
+        $sql = file_get_contents(__DIR__ . '/../sql/delete_project_from_user_projects.sql');
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':project_id' => $projectId
+        ]);
+    }
+    public function getUserProjectRole(string $userId, string $projectId): ?string
+    {
+      $sql = file_get_contents(__DIR__ . '/../sql/get_project_role.sql');
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([':user_id' => $userId, ':project_id' => $projectId]);
+
+      $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+      // 見つからなかったら null を返す
+      if (!$row || !isset($row['project_role_id'])) {
+          return null;
+      }
+
+      // 見つかったので role_id を返す
+      return $row['project_role_id'];
+    }
 }
