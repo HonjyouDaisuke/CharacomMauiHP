@@ -20,17 +20,27 @@ class DeleteProjectService
 
     public function execute(string $projectId): bool
     {
+        if (! $this->projectRepo->existsById($projectId)) {
+            return false;
+        }
+
         $this->projectRepo->beginTransaction();
 
         try {
-            $this->charaDataRepo->deleteByProjectId($projectId);
-            $this->userProjectsRepo->deleteByProjectId($projectId);
+          $ok =
+            $this->charaDataRepo->deleteByProjectId($projectId) &&
+            $this->userProjectsRepo->deleteByProjectId($projectId) &&
             $this->projectRepo->deleteByProjectId($projectId);
-
+            
+          if (! $ok) {
+            $this->projectRepo->rollBack();
+            return false;
+          }
             $this->projectRepo->commit();
             return true;
         } catch (\Throwable $e) {
             $this->projectRepo->rollBack();
+            // TODO:  エラーログ出力
             return false;
         }
     }

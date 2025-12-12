@@ -21,4 +21,9 @@ class GetUserProjectsService
     {
         return $this->repo->getUserProjectsInfo($userId);
     }
+
+    public function getProjectRole(string $userId, string $projectId): ?string
+    {
+        return $this->repo->getUserProjectRole($userId, $projectId);
+    }
 }

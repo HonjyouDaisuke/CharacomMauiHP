@@ -51,6 +51,22 @@ class ProjectRepository
         return $res ? $project->id : "";
     }
 
+    public function existsById(string $projectId): ?string
+    {
+      $stmt = $this->db->prepare("SELECT id FROM projects WHERE id = :project_id LIMIT 1");
+      $stmt->execute([':project_id' => $projectId]);
+
+      $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+      // 見つかった → id を返す
+      if ($row && isset($row['id'])) {
+          return $row['id'];
+      }
+
+      // 見つからなかった → null
+      return null;
+    }
+
     public function exists(string $name): ?string
     {
       $stmt = $this->db->prepare("SELECT id FROM projects WHERE name = :name LIMIT 1");
