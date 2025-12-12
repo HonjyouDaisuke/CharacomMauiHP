@@ -31,7 +31,7 @@ class DeleteProjectService
             $this->charaDataRepo->deleteByProjectId($projectId) &&
             $this->userProjectsRepo->deleteByProjectId($projectId) &&
             $this->projectRepo->deleteByProjectId($projectId);
-            
+
           if (! $ok) {
             $this->projectRepo->rollBack();
             return false;
@@ -40,7 +40,7 @@ class DeleteProjectService
             return true;
         } catch (\Throwable $e) {
             $this->projectRepo->rollBack();
-            // TODO:  エラーログ出力
+            error_log("プロジェクト削除エラー - projectId: {$projectId}, エラー: " . $e->getMessage());
             return false;
         }
     }
