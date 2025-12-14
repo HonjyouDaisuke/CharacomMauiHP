@@ -110,7 +110,7 @@ class ProjectRepository
           createdBy: $row['created_by'] ?? '',
           updatedAt: $row['updated_at'],
           charaCount: (int)$row['chara_count'],
-          participants: $row['participants']
+          participants: ($row['participants'] ?? null)
               ? array_map('trim', explode(',', $row['participants']))
               : []
       );
