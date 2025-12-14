@@ -5,6 +5,7 @@ use Backend\Domain\Entities\Project;
 use Backend\Domain\EncryptionServiceInterface;
 use Backend\Domain\Service;
 use Backend\Domain\Service\UuidService;
+use Backend\Domain\Entities\ProjectDetails;
 use PDO;
 
 class ProjectRepository
@@ -82,7 +83,38 @@ class ProjectRepository
       // 見つからなかった → null
       return null;
     }
-    
+    public function getProjectDetails(string $projectId): ?ProjectDetails
+    {
+      $sql = file_get_contents(__DIR__ . '/../sql/get_project_details.sql');
+      if ($sql === false) {
+        throw new \RuntimeException('Failed to load SQL: get_project_details.sql');
+      }
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([':project_id' => $projectId]);
+
+      $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+      
+      // 見つからなかったら null を返す
+      if (!$row) {
+          return null;
+      }
+
+      // 見つかったので Project オブジェクトを作って返す
+      return new ProjectDetails(
+          id: $row['project_id'],
+          name: $row['project_name'],
+          description: $row['project_description'] ?? '',
+          projectFolderId: $row['project_folder_id'],
+          charaFolderId: $row['chara_folder_id'],
+          createdAt: $row['created_at'],
+          createdBy: $row['created_by'] ?? '',
+          updatedAt: $row['updated_at'],
+          charaCount: (int)$row['chara_count'],
+          participants: ($row['participants'] ?? null)
+              ? array_map('trim', explode(',', $row['participants']))
+              : []
+      );
+    }
     public function getProjectInfo(string $projectId): ?Project
     {
       $stmt = $this->db->prepare("SELECT * FROM projects WHERE id = :project_id LIMIT 1");
