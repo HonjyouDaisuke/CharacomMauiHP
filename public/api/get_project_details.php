@@ -20,9 +20,10 @@ $config = require __DIR__ . '/../../backend/config/env.local.php';
 if (!$token || !$projectId)
 {
   header('Content-Type: application/json; charset=utf-8');
+  http_response_code(400);
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました token:".$token." projectId:".$projectId,
+    'message'  => "入力チェックでエラーが出ました projectId:".$projectId,
   ]);
   exit;
 } 
@@ -34,10 +35,11 @@ $db = new Database($config);
 $userInfoService = new GetUserInfoService($db, $config);
 $userInfo = $userInfoService->GetUserId($token);
 if (!$userInfo['success']) {
+  http_response_code(401);
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました invalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ました userId:".$userInfo['id'],
   ]);
   exit;
 }
@@ -46,8 +48,9 @@ if (!$userInfo['success']) {
 $userProjectsRepo = new UserProjectsRepository($db);
 $getUserProjectsService = new GetUserProjectsService($userProjectsRepo);
 $projectRole = $getUserProjectsService->getProjectRole($userInfo['userId'], $projectId);
-// 閲覧権限がなければエラー
-if ($projectRole === 'unapproved') {
+// 閲覧権限がなければエラー（未参加/nullも拒否）
+if ($projectRole === null || $projectRole === 'unapproved') {
+  http_response_code(403);
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -61,6 +64,15 @@ $projectRepo = new ProjectRepository($db);
 $usecase = new GetProjectDetailsService($projectRepo);
 
 $res = $usecase->getProjectDetails($projectId);
+if (!$res) {
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'success' => false,
+    'message'  => "プロジェクトの削除でエラーが出ました projectId:".$projectId,
+  ]);
+  exit;
+}
+
 $responseData = [
   'id' => $res->id,
   'name' => $res->name,
@@ -74,14 +86,7 @@ $responseData = [
   'participants' => $res->participants,
 ];
 
-if (!$res) {
-  header('Content-Type: application/json; charset=utf-8');
-  echo json_encode([
-    'success' => false,
-    'message'  => "プロジェクトの削除でエラーが出ました projectId:".$projectId,
-  ]);
-  exit;
-}
+http_response_code(200);
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
     'success' => true,

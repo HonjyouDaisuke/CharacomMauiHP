@@ -1,11 +1,11 @@
 SELECT
     p.id AS project_id,
     p.name AS project_name,
-    p.description AS project_description,
+    COALESCE(p.description, '') AS project_description,
     p.folder_id AS project_folder_id,
     p.chara_folder_id AS chara_folder_id,
     DATE_FORMAT(p.created_at, '%Y-%m-%dT%H:%i:%s') AS created_at,
-    u_creator.name AS created_by,
+    COALESCE(u_creator.name, '') AS created_by,
     DATE_FORMAT(p.updated_at, '%Y-%m-%dT%H:%i:%s') AS updated_at,
 
     -- CharaData 件数

@@ -86,6 +86,9 @@ class ProjectRepository
     public function getProjectDetails(string $projectId): ?ProjectDetails
     {
       $sql = file_get_contents(__DIR__ . '/../sql/get_project_details.sql');
+      if ($sql === false) {
+        throw new \RuntimeException('Failed to load SQL: get_project_details.sql');
+      }
       $stmt = $this->db->prepare($sql);
       $stmt->execute([':project_id' => $projectId]);
 
@@ -100,11 +103,11 @@ class ProjectRepository
       return new ProjectDetails(
           id: $row['project_id'],
           name: $row['project_name'],
-          description: $row['project_description'],
+          description: $row['project_description'] ?? '',
           projectFolderId: $row['project_folder_id'],
           charaFolderId: $row['chara_folder_id'],
           createdAt: $row['created_at'],
-          createdBy: $row['created_by'],
+          createdBy: $row['created_by'] ?? '',
           updatedAt: $row['updated_at'],
           charaCount: (int)$row['chara_count'],
           participants: $row['participants']

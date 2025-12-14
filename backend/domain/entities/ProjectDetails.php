@@ -14,15 +14,15 @@ final class ProjectDetails
      * @param string[] $participants
      */
     public function __construct(
-        public string $id,
-        public string $name,
-        public string $description,
-        public string $projectFolderId,
-        public string $charaFolderId,
-        public string $createdAt,
-        public string $createdBy,
-        public string $updatedAt,
-        public int $charaCount = 0,
-        public array $participants = []
+        public readonly string $id,
+        public readonly string $name,
+        public readonly string $description,
+        public readonly string $projectFolderId,
+        public readonly string $charaFolderId,
+        public readonly string $createdAt,
+        public readonly string $createdBy,
+        public readonly string $updatedAt,
+        public readonly int $charaCount = 0,
+        public readonly array $participants = []
     ) {}
 }
