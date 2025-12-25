@@ -1,8 +1,5 @@
 UPDATE users
 SET
-    name = :name,
-    email = :email,
-    picture_url = :picture_url,
     box_user_id = :box_user_id,
     box_access_token = :box_access_token,
     box_refresh_token = :box_refresh_token,
