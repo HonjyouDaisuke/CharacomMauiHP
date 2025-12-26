@@ -43,9 +43,6 @@ class UserRepository
 
         return $stmt->execute([
             ':id' => $user->id,
-            ':name' => $user->name,
-            ':email' => $user->email,
-            ':picture_url' => $user->picture_url,
             ':box_user_id' => $user->box_user_id,
             ':box_access_token' => $this->enc->encrypt($user->box_access_token),
             ':box_refresh_token' => $this->enc->encrypt($user->box_refresh_token),
@@ -80,5 +77,18 @@ class UserRepository
             token_expires_at: new \DateTime($row['token_expires_at'] ?? 'now'),
             role_id: $row['role_id'] ?? ''
         );
+    }
+
+    public function updateUserInfo(string $userId, string $userName, string $email, string $avatarUrl): bool
+    {
+        $sql = file_get_contents(__DIR__ . '/../sql/update_user_info.sql');
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $userId,
+            ':name' => $userName,
+            ':email' => $email,
+            ':picture_url' => $avatarUrl,
+        ]);
     }
 }
