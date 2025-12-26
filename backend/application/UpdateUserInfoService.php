@@ -24,8 +24,12 @@ class UpdateUserInfoService
         }
         $success = $this->repo->updateUserInfo( $userId, $userName, $email, $avatarUrl);
 
-        // 3. DBへ保存
-        //$success = $this->repo->create($_user);
+        $success = $this->repo->updateUserInfo( $userId, $userName, $email, $avatarUrl);
+
+        return [
+            'success' => $success,
+            'message' => $success ? 'User info updated successfully.' : 'Failed to update user info.'
+        ];
 
         return [
             'success' => $success,
