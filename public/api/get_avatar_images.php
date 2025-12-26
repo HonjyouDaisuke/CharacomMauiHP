@@ -30,7 +30,7 @@ if (!$userInfo['success']) {
 
 // Avatar取得
 $avatarRepo = new AvatarRepository(
-    __DIR__ . '/../../public/avatars',
+    $config['avatar_source_url'],
     $config['avatar_base_url']
 );
 
@@ -40,7 +40,7 @@ $avatars = $avatarService->execute();
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
     'success' => true,
-    'avater_dir' => __DIR__ . '/../../public/avatars',
+    'avatar_dir' => $config['avatar_source_url'],
     'base_url' => $config['avatar_base_url'],
     'user_id' => $userInfo['userId'],
     'avatars' => $avatars

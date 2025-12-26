@@ -26,7 +26,7 @@ if (!$token || !$userName || !$userEmail || !$avatarUrl)
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました token:".$token." UserName:".$userName,
+    'message'  => "入力チェックでエラーが出ました UserName:".$userName,
   ]);
   exit;
 } 
@@ -45,7 +45,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました invalid user info\ntoken=".$token."\n userId:".$userInfo['userId'],
+    'message'  => "ユーザー認証でエラーが出ました invalid user info\nuserId:".$userInfo['userId'],
   ]);
   exit;
 }
@@ -56,16 +56,16 @@ $usecase = new UpdateUserInfoService($userRepo);
 
 $res = $usecase->execute($userInfo['userId'], $userName, $userEmail, $avatarUrl);
 
-if (!$res) {
+if (!$res['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー情報登録でエラーになりました。 userId:".$userInfo['userId'],
+    'message'  => $res['message'] ?? "ユーザー情報登録でエラーになりました。",
   ]);
   exit;
 }
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
     'success' => true,
-    'message'  => "ユーザー情報を更新しました。 userId:".$userInfo['userId'],
+    'message'  => $res['message'],
 ]);

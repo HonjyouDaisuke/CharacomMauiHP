@@ -16,7 +16,6 @@ class UpdateUserInfoService
     public function execute(string $userId, string $userName, string $email, string $avatarUrl): array
     {
         // 1. ユーザーの存在チェック
-         if (!$this->repo->exists($userId)) {
         if (!$this->repo->exists($userId)) {
           return [
             'success' => false,
@@ -30,7 +29,7 @@ class UpdateUserInfoService
 
         return [
             'success' => $success,
-            'message' => $success ? 'User created successfully.' : 'Failed to create user.'
+            'message' => $success ? 'User info updated successfully.' : 'Failed to update user info.'
         ];
     }
 }
