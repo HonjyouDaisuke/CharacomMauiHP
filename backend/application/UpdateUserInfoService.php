@@ -15,7 +15,8 @@ class UpdateUserInfoService
 
     public function execute(string $userId, string $userName, string $email, string $avatarUrl): array
     {
-        // 1. Emailの重複チェック
+        // 1. ユーザーの存在チェック
+         if (!$this->repo->exists($userId)) {
         if (!$this->repo->exists($userId)) {
           return [
             'success' => false,
