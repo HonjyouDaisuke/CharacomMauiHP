@@ -14,7 +14,7 @@ class AvatarRepository
 
     public function getAll(): array
     {
-        if (!is_dir($this->avatarDir)) {
+        if (!is_dir($this->avatarDir) || !is_readable($this->avatarDir)) {
             return [];
         }
 

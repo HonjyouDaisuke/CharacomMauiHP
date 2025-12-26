@@ -2,12 +2,7 @@
 require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
 use Backend\Infrastructure\Database;
-use Backend\Infrastructure\ProjectRepository;
-use Backend\Infrastructure\CharaDataRepository;
-use Backend\Infrastructure\UserProjectsRepository;
-use Backend\Application\DeleteProjectService;
 use Backend\Application\GetUserInfoService;
-use Backend\Application\GetUserProjectsService;
 use Backend\Application\UpdateUserInfoService;
 use Backend\Infrastructure\UserRepository;
 use Backend\Infrastructure\OpenSSLEncryptionService;
