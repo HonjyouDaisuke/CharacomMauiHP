@@ -20,7 +20,12 @@ class AvatarRepository
 
         $avatars = [];
 
-        foreach (scandir($this->avatarDir) as $file) {
+        $files = scandir($this->avatarDir);
+        if ($files === false) {
+            return [];
+        }
+
+        foreach ($files as $file) {
             if ($file === '.' || $file === '..') continue;
 
             $path = $this->avatarDir . '/' . $file;
