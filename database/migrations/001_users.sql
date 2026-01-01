@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-    id CHAR(255) NOT NULL PRIMARY KEY,
+    id CHAR(255) NOT NULL PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(100),
-    email VARCHAR(255) UNIQUE,
+    email VARCHAR(255),
     picture_url VARCHAR(512),
     box_user_id VARCHAR(255),
     box_access_token TEXT,
