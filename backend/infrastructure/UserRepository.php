@@ -91,4 +91,19 @@ class UserRepository
             ':picture_url' => $avatarUrl,
         ]);
     }
+
+    public function getAllUsers(): ?array
+    {
+        $sql = file_get_contents(__DIR__ . '/../sql/get_all_users.sql');
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($rows)) {
+            return null;
+        }
+
+        return $rows;
+    }
 }
