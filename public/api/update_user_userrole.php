@@ -39,12 +39,12 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました invalid user info\nuserId:".$userInfo['userId'],
+    'message' => "ユーザー認証でエラーが出ました: ".($userInfo['message'] ?? 'invalid token'),
   ]);
   exit;
 }
 $executeUser = $userInfoService->GetUserInfo($userInfo['userId']);
-if ($executeUser->role_id != "admin"){
+if (!$executeUser || $executeUser->role_id != "admin"){
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,

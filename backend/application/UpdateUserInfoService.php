@@ -40,8 +40,8 @@ class UpdateUserInfoService
 
       $success = $this->repo->updateUserRole($userId, $userRoleId);
       return [
-        'success' => true,
-        'message' =>  $success ? 'User role updated successfully.' : 'Failed to update user role.',
+        'success' => $success,
+        'message' => $success ? 'User role updated successfully.' : 'Failed to update user role.',
       ];
     }
 }

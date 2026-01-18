@@ -42,11 +42,11 @@ if (!$userInfo['success']) {
   exit;
 }
 $executeUser = $userInfoService->GetUserInfo($userInfo['userId']);
-if ($executeUser->role_id != "admin"){
+if (!$executeUser || $executeUser->role_id != "admin"){
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました admin権限でないと実行できません".$userInfo['userId'].":".$executeUser->role_id,
+    'message'  => "ユーザー認証でエラーが出ました admin権限でないと実行できません",
   ]);
   exit;
 }
