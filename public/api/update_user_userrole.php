@@ -68,5 +68,5 @@ if (!$res['success']) {
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
     'success' => true,
-    'message'  => $res['message']."userRole=".$executeUser->role_id,
+    'message'  => $res['message'],
 ]);
