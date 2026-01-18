@@ -28,4 +28,19 @@ class UpdateUserInfoService
             'message' => $success ? 'User info updated successfully.' : 'Failed to update user info.'
         ];
     }
+    public function updateUserRole(string $userId, string $userRoleId): array
+    {
+      // ユーザーの存在チェック
+      if (!$this->repo->updateUserRole($userId, $userRoleId)) {
+        return [
+          'success' => false,
+          'message' => 'Failed to update user info. User not found! : '.$userId,
+        ];
+      }
+
+      return [
+        'success' => true,
+        'message' => 'user role updated : '.$userId
+      ];
+    }
 }

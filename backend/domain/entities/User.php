@@ -5,7 +5,7 @@ use DateTime;
 
 class User
 {
-    public const ROLE_UNAPPROVED = 'unapploved';
+    public const ROLE_UNAPPROVED = 'unapproved';
     
     public function __construct(
         public string $id,

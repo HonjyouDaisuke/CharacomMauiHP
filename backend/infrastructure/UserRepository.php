@@ -51,6 +51,17 @@ class UserRepository
         ]);
     }
 
+    public function updateUserRole(string $userId, string $userRoleId): bool
+    {
+        $sql = file_get_contents(__DIR__ . '/../sql/update_user_userrole.sql');
+        $stmt = $this->db->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $userId,
+            ':role_id' => $userRoleId
+        ]);
+    }
+
     public function exists(string $id): bool
     {
         $stmt = $this->db->prepare("SELECT id FROM users WHERE id=:id LIMIT 1");
