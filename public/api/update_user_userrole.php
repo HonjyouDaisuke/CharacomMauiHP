@@ -35,8 +35,7 @@ $crypto = new OpenSSLEncryptionService(
 // User認証 & User情報取得
 $userInfoService = new GetUserInfoService($db, $config);
 $userInfo = $userInfoService->GetUserId($token);
-$executeUser = $userInfoService->GetUserInfo($userInfo['userId']);
-if (!$userInfo['success'] || $executeUser->role_id != "admin") {
+if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -44,7 +43,15 @@ if (!$userInfo['success'] || $executeUser->role_id != "admin") {
   ]);
   exit;
 }
-
+$executeUser = $userInfoService->GetUserInfo($userInfo['userId']);
+if ($executeUser->role_id != "admin"){
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'success' => false,
+    'message'  => "ユーザー認証でエラーが出ました admin権限でないと実行できません",
+  ]);
+  exit;
+}
 $userRepo = new UserRepository($db, $crypto);
 $usecase = new UpdateUserInfoService($userRepo);
 

@@ -44,7 +44,7 @@ if ($roles === null)
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'user_id' => $userId,
+    'user_id' => $userInfo['userId'] ?? null,
     'message' => "There is no projects...",
   ]);
   exit;

@@ -31,16 +31,17 @@ class UpdateUserInfoService
     public function updateUserRole(string $userId, string $userRoleId): array
     {
       // ユーザーの存在チェック
-      if (!$this->repo->updateUserRole($userId, $userRoleId)) {
+      if (!$this->repo->exists($userId)) {
         return [
           'success' => false,
-          'message' => 'Failed to update user info. User not found! : '.$userId,
+          'message' => 'Failed to update user role. User not found! : '.$userId,
         ];
       }
 
+      $success = $this->repo->updateUserRole($userId, $userRoleId);
       return [
         'success' => true,
-        'message' => 'user role updated : '.$userId
+        'message' =>  $success ? 'User role updated successfully.' : 'Failed to update user role.',
       ];
     }
 }

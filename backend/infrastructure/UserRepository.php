@@ -46,13 +46,16 @@ class UserRepository
             ':box_user_id' => $user->box_user_id,
             ':box_access_token' => $this->enc->encrypt($user->box_access_token),
             ':box_refresh_token' => $this->enc->encrypt($user->box_refresh_token),
-            ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s'),
-            ':role_id' => $user->role_id
+            ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s')
         ]);
     }
 
     public function updateUserRole(string $userId, string $userRoleId): bool
     {
+        if (!$this->exists($userId)) {
+            return false;
+        }
+        
         $sql = file_get_contents(__DIR__ . '/../sql/update_user_userrole.sql');
         $stmt = $this->db->prepare($sql);
 

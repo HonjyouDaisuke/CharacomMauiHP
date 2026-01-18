@@ -56,7 +56,7 @@ class GetUserInfoService
       return  $this->repo->getById($userId);
     }
 
-    public function GetAllUsers(): array
+    public function GetAllUsers(): ?array
     {
       return  $this->repo->getAllUsers();
     }
