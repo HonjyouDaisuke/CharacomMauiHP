@@ -44,7 +44,7 @@ if (!$userInfo['success']) {
   exit;
 }
 $executeUser = $userInfoService->GetUserInfo($userInfo['userId']);
-if (!$executeUser || $executeUser->role_id != "admin"){
+if (!$executeUser || $executeUser->role_id !== "admin"){
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
