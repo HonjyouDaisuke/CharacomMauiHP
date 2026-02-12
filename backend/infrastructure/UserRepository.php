@@ -86,8 +86,8 @@ class UserRepository
             email: $row['email'],
             picture_url: $row['picture_url'],
             box_user_id: $row['box_user_id'],
-            box_access_token: $row['box_access_token'],
-            box_refresh_token: $row['box_refresh_token'],
+            box_access_token: $row['box_access_token'] ?? '',
+            box_refresh_token: $row['box_refresh_token'] ?? '',
             token_expires_at: new \DateTime($row['token_expires_at'] ?? 'now'),
             role_id: $row['role_id'] ?? ''
         );

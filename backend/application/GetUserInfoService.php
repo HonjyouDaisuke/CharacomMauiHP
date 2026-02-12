@@ -6,11 +6,14 @@ use Backend\Infrastructure\UserRepository;
 use Backend\Infrastructure\OpenSSLEncryptionService;
 use Backend\Application\ValidateTokenService;
 use Backend\Application\BoxTokenService;
+use Backend\Application\ProxyBoxTokenService;
 use Backend\Domain\Entities\User;
+use Backend\Infrastructure\ProxyLoginRepository;
 
 class GetUserInfoService
 {
     private UserRepository $repo;
+    private ProxyLoginRepository $proxyRepo;
     private OpenSSLEncryptionService $crypto;
     private ValidateTokenService $validator;
 
@@ -24,7 +27,7 @@ class GetUserInfoService
 
         // Repository
         $this->repo = new UserRepository($db, $this->crypto);
-
+        $this->proxyRepo = new ProxyLoginRepository($db, $this->crypto);
         // JWT validator
         $this->validator = new ValidateTokenService($config['jwt_secret']);
     }
@@ -38,16 +41,24 @@ class GetUserInfoService
         }
 
         $userId = $result['userId'];
+        $isProxy = $result['payload']['is_proxy'] ?? false;
 
         // Box token service
         $boxService = new BoxTokenService($this->repo, $this->crypto);
         $tokens = $boxService->getBoxTokens($userId);
+        // TODO: isProxyがtrueの場合proxy_loginテーブルからBoxトークンを取得するロジックを追加
+        if ($isProxy) {
+            $proxyBoxService = new ProxyBoxTokenService($this->proxyRepo, $this->crypto);
+            $tokens = $proxyBoxService->getBoxTokens($result['payload']['from_user_id'] ?? '');
+        } 
 
         return [
             'success'          => true,
             'userId'           => $userId,
+            'isProxy'          => $isProxy,
             'boxAccessToken'   => $tokens['access_token'] ?? null,
-            'boxRefreshToken'  => $tokens['refresh_token'] ?? null
+            'boxRefreshToken'  => $tokens['refresh_token'] ?? null,
+            'payload'          => $result['payload'] ?? null,
         ];
     }
 

@@ -52,6 +52,14 @@ $userId = $userInfo['userId'];
 
 $accessToken = $userInfo['boxAccessToken'];
 
+if(!$accessToken || $accessToken === "") {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'success' => false,
+        'message'  => "Box access token is missing for userId: ".$userId,
+    ]);
+    exit;
+} 
 // Chara情報取得
 $boxFolderItems = new GetBoxFolderItemsService();
 $globalSettings = $globalSettingService->GetGlobalSetting();
@@ -63,6 +71,5 @@ $items = $boxFolderItems->execute($accessToken, $strokeFolderId);
 $strokeRepo = new StrokeMasterRepository($db);
 $createStrokeService = new CreateOrUpdateStrokeMasterService($strokeRepo);
 $res = $createStrokeService->execute($items, $userId);
-
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode($res);

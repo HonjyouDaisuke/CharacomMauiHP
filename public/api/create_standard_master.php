@@ -1,22 +1,13 @@
 <?php
 require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
-use Backend\Application\CreateOrUpdateCharaDataService;
-use Backend\Application\CreateOrUpdateProjectService;
 use Backend\Application\CreateOrUpdateStandardMasterService;
-use Backend\Application\CreateOrUpdateStrokeMasterService;
-use Backend\Application\CreateUserProjectsService;
 use Backend\Application\GetBoxFolderItemsService;
 use Backend\Infrastructure\Database;
 use Backend\Application\GetGlobalSettingService;
 use Backend\Application\GetUserInfoService;
-use Backend\Infrastructure\ProjectRepository;
-use Backend\Domain\Entities\Project;
-use Backend\Infrastructure\CharaDataRepository;
 use Backend\Infrastructure\StandardMasterRepository;
-use Backend\Infrastructure\StrokeMasterRepository;
-use Backend\Infrastructure\UserProjectsRepository;
-
+set_time_limit(120);
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
 $token = $data['token'] ?? '';

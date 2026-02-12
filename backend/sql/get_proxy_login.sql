@@ -1,0 +1,1 @@
+SELECT * FROM proxy_login WHERE from_user_id = :from_user_id;
