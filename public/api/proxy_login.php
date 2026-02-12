@@ -3,11 +3,8 @@ require_once __DIR__ . '/../../backend/vendor/autoload.php';
 
 use Backend\Infrastructure\Database;
 use Backend\Application\GetUserInfoService;
-use Backend\Application\UpdateUserInfoService;
-use Backend\Infrastructure\UserRepository;
 use Backend\Infrastructure\OpenSSLEncryptionService;
 use Backend\Application\GenerateTokenService;
-use Backend\Domain\Entities\User;
 use Backend\Application\InsertProxyLoginService;
 use Backend\Infrastructure\ProxyLoginRepository;
 
@@ -19,7 +16,15 @@ $toUserId = $data['to_user_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
+if (!$token || !$toUserId)
+{
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'success' => false,
+    'message'  => "入力チェックでエラーが出ました",
+  ]);
+  exit;
+}
 {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
