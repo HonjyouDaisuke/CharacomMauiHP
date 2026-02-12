@@ -7,7 +7,7 @@ class GenerateTokenService
 {
     public function __construct(private string $secret, private int $expire = 3600) {}
 
-    public function execute(User $user): array
+    public function execute(User $user, bool $isProxy = false, string $fromUserId = ""): array
     {
         $now = time();
 
@@ -22,6 +22,8 @@ class GenerateTokenService
             'sub' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'is_proxy' => $isProxy,
+            'from_user_id' => $fromUserId,
             'iat' => $now,
             'exp' => $now + $this->expire
         ];

@@ -1,14 +1,8 @@
 <?php
 namespace Backend\Application;
 
-use Backend\Infrastructure\Database;
-use Backend\Infrastructure\UserRepository;
-use Backend\Infrastructure\OpenSSLEncryptionService;
-use Backend\Application\ValidateTokenService;
-use Backend\Application\BoxTokenService;
 use Backend\Infrastructure\ProjectRepository;
 use Backend\Domain\Entities\ProjectDetails;
-use Backend\Infrastructure\UserProjectsRepository;
 
 class GetProjectDetailsService
 {
