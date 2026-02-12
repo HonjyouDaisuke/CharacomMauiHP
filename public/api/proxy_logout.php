@@ -73,18 +73,18 @@ if (!$fromUser) {
 /// Proxyログイン情報削除
 $proxyRepo = new ProxyLoginRepository($db, $crypto);
 $deleteService = new DeleteProxyLoginService($proxyRepo);
-$sucess = $deleteService->execute($fromUserId);
-if (!$sucess['success']){
+$success = $deleteService->execute($fromUserId);
+if (!$success['success']){
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "Proxyログイン情報削除でエラーが出ました: ".($sucess['message'] ?? ''),
+    'message'  => "Proxyログイン情報削除でエラーが出ました: ".($success['message'] ?? ''),
   ]);
   exit;
 }
 
 $getTokenService = new GenerateTokenService($config['jwt_secret']);
-$token = $getTokenService->execute($fromUser, false, $fromUser->id);
+$token = $getTokenService->execute($fromUser, false, "");
 
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([

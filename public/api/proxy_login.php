@@ -32,7 +32,7 @@ if (!$token || !$userName || !$userEmail)
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました UserName:".$userName,
+    'message'  => "入力チェックでエラーが出ました.",
   ]);
   exit;
 } 
@@ -51,13 +51,25 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました invalid user info\nuserId:".$userInfo['userId'],
+    'message'  => "ユーザー認証でエラーが出ました.",
   ]);
   exit;
 }
 
-// 管理者権限のチェック
-if ($userRoleId !== "admin"){
+// 管理者権限のチェック（サーバーサイドで取得したロールを使用）
+$fromUser = $userInfoService->GetUserInfo($userInfo['userId']);
+$toUser = $userInfoService->GetUserInfo($toUserId);
+
+if (!$fromUser || !$toUser) {
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'success' => false,
+    'message'  => "ユーザー情報の取得に失敗しました。",
+  ]);
+  exit;
+}
+
+if (!$fromUser || $fromUser->role_id !== "admin"){
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -65,9 +77,8 @@ if ($userRoleId !== "admin"){
   ]);
   exit;
 }
-// fromユーザー情報取得
-$fromUser = $userInfoService->GetUserInfo($userInfo['userId']);
-$toUser = $userInfoService->GetUserInfo($toUserId);
+
+// toユーザー情報を上書き
 $toUser->box_user_id = $fromUser->box_user_id;
 $toUser->box_access_token = $fromUser->box_access_token;
 $toUser->box_refresh_token = $fromUser->box_refresh_token;
@@ -82,17 +93,24 @@ $proxyLoginRepo = new ProxyLoginRepository($db, $crypto);
 $insertProxyLoginService = new InsertProxyLoginService($proxyLoginRepo);
 $res = $insertProxyLoginService->execute($fromUser, $toUser);
 
-// 出来上がりToken返却
-
 // successチェック
-//if (!$res['success']) {
+if (!$res['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
-    'success' => true,
-    'message'  => "Proxy login token created successfully.",
-    'access_token'  => $token['accessToken'],
-    'refresh_token' => $token['refreshToken'],
-    'expire_at'     => $token['expireAt'],
+    'success' => false,
+    'message'  => "Proxyログイン情報作成でエラーが出ました: ".($res['message'] ?? ''),
   ]);
-//}
+  exit;
+}
+
+// 出来上がりToken返却
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode([
+  'success' => true,
+  'message'  => "Proxy login token created successfully.",
+  'access_token'  => $token['accessToken'],
+  'refresh_token' => $token['refreshToken'],
+  'expire_at'     => $token['expireAt'],
+]);
+
 

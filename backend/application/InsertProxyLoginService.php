@@ -12,7 +12,7 @@ class InsertProxyLoginService
         $this->repo = $repo;
     }
 
-    public function execute(User $_toUser, User $_fromUser): array
+    public function execute(User $_fromUser, User $_toUser): array
     {
       $success = $this->repo->insert($_fromUser, $_toUser);
         
@@ -25,7 +25,7 @@ class InsertProxyLoginService
 
       return [
         'success' => $success,
-        'message' => 'User created successfully.',
+        'message' => 'Proxy login record inserted successfully.',
       ];
     }
 }

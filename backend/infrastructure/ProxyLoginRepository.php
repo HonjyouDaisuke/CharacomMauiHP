@@ -18,7 +18,7 @@ class ProxyLoginRepository
         $this->enc = $enc;
     }
 
-    public function insert(User $toUser, User $fromUser): bool
+    public function insert(User $fromUser, User $toUser): bool
     {
         $sql = file_get_contents(__DIR__ . '/../sql/insert_proxy_login.sql');
         $stmt = $this->db->prepare($sql);

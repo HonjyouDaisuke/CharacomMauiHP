@@ -44,13 +44,18 @@ class GetUserInfoService
         $isProxy = $result['payload']['is_proxy'] ?? false;
 
         // Box token service
-        $boxService = new BoxTokenService($this->repo, $this->crypto);
-        $tokens = $boxService->getBoxTokens($userId);
-        // TODO: isProxyがtrueの場合proxy_loginテーブルからBoxトークンを取得するロジックを追加
+        $tokens = [];    
         if ($isProxy) {
             $proxyBoxService = new ProxyBoxTokenService($this->proxyRepo, $this->crypto);
             $tokens = $proxyBoxService->getBoxTokens($result['payload']['from_user_id'] ?? '');
-        } 
+        }else{
+            $boxService = new BoxTokenService($this->repo, $this->crypto);
+            $tokens = $boxService->getBoxTokens($userId);
+        }
+        
+        if (!$tokens) {
+            return ['success' => false, 'message' => 'Failed to retrieve Box tokens'];
+        }
 
         return [
             'success'          => true,
