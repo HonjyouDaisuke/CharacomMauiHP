@@ -21,18 +21,10 @@ if (!$token || !$toUserId)
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました",
+    'message'  => "入力チェックでエラーが出ました。",
   ]);
   exit;
 }
-{
-  header('Content-Type: application/json; charset=utf-8');
-  echo json_encode([
-    'success' => false,
-    'message'  => "入力チェックでエラーが出ました.",
-  ]);
-  exit;
-} 
 
 // DBインスタンス
 $db = new Database($config);
