@@ -40,7 +40,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました.",
+    'message'  => "ユーザー認証でエラーが出ました。",
   ]);
   exit;
 }
@@ -58,7 +58,7 @@ if (!$fromUser || !$toUser) {
   exit;
 }
 
-if (!$fromUser || $fromUser->role_id !== "admin"){
+if ($fromUser->role_id !== "admin"){
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
