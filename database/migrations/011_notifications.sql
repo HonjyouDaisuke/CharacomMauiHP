@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS notifications;
+
+CREATE TABLE notifications (
+    id CHAR(36) NOT NULL PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36),
+    type_id VARCHAR(36),
+    title VARCHAR(255),
+    message TEXT,
+    link_type VARCHAR(36) DEFAULT NULL,
+    link_id VARCHAR(36) DEFAULT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_by VARCHAR(36) DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

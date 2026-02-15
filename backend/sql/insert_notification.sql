@@ -1,0 +1,22 @@
+INSERT INTO notifications 
+  (
+    user_id,
+    type_id,
+    title,
+    message,
+    link_type,
+    link_id,
+    is_read,
+    created_by
+  ) 
+VALUES 
+  (
+    :user_id,
+    :type_id,
+    :title,
+    :message,
+    :link_type,
+    :link_id,
+    :is_read,
+    :created_by
+  );

@@ -40,7 +40,35 @@ class CreateUserProjectsService
         return [
             'success' => true,
             'message' => 'No updated.',
-            'id' => "", // ← create/update で返ってきた ID をそのまま返す
+            'id' => $existingId, // ← create/update で返ってきた ID をそのまま返す
         ];
+    }
+
+    public function inviteToProject(string $toUserId, string $projectId, string $roleId): array
+    {
+        // 存在チェック
+        $existingId = $this->repo->exists($toUserId, $projectId);
+
+        if ($existingId !== null) {
+            // すでにプロジェクトに参加している場合はエラーを返す
+            return [
+                'success' => false,
+                'message' => 'User is already a member of the project.',
+            ];
+        } else {
+            // CREATE
+            $res = $this->repo->create($toUserId, $projectId, $roleId);
+
+            if (!$res) {
+              return [
+                'success' => false,
+                'message' => 'Failed to invite user to project.',
+              ];
+            }
+            return [
+                'success' => true,
+                'message' => 'User invited to project successfully.',
+              ];
+        }
     }
 }

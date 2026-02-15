@@ -14,16 +14,17 @@ class UserProjectsRepository
         $this->db = $database->getConnection();
     }
 
-    public function create(string $userId, string $projectId): bool
+    public function create(string $userId, string $projectId, string $roleId = 'owner'): bool
     {
         $stmt = $this->db->prepare(
             "INSERT INTO user_projects (user_id, project_id, project_role_id)
-            VALUES (:user_id, :project_id, 'owner')"
+            VALUES (:user_id, :project_id, :role_id)"
         );
 
         return $stmt->execute([
             ':user_id' => $userId,
-            ':project_id' => $projectId
+            ':project_id' => $projectId,
+            ':role_id' => $roleId
         ]);
     }
 
