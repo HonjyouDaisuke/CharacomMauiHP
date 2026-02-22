@@ -56,12 +56,15 @@ $getUserInfoService = new GetUserInfoService($db, $config);
 $fromUserInfo = $getUserInfoService->GetUserInfo($userInfo['userId']);
 $fromUserName = $fromUserInfo->name ?? "Unknown User";
 
+$toUserInfo = $getUserInfoService->GetUserInfo($toUserId);
+$toUserName = $toUserInfo->name ?? "Unknown User";
+
 // プロジェクト名の取得
 $projectRepo = new ProjectRepository($db);
 $project = $projectRepo->getProjectDetails($projectId);
 $projectName = $project->name ?? "Unknown Project";
 
-// Notificationsの挿入
+// Notificationsの挿入(招待相手)
 $notificationRepo = new NotificationsRepository($db);
 $insertNotificationService = new InsertNotificationService($notificationRepo);
 $notificationData = new NotificationData(
@@ -69,6 +72,16 @@ $notificationData = new NotificationData(
   type_id: 'project_invite',
   title: "プロジェクトに招待されました。",
   message: $fromUserName . "さんがプロジェクトに招待しました。プロジェクト名: $projectName 権限: $toRoleId",
+  is_read: false,
+  created_by: $userInfo['userId']
+);
+$insertNotificationResult = $insertNotificationService->execute($notificationData);
+// Notificationsの挿入(自分用)
+$notificationData = new NotificationData(
+  user_id: $fromUserInfo->id,
+  type_id: 'system',
+  title: "プロジェクトに招待しました。",
+  message: $toUserName . "さんをプロジェクトに招待しました。プロジェクト名: $projectName 権限: $toRoleId",
   is_read: false,
   created_by: $userInfo['userId']
 );

@@ -1,5 +1,5 @@
 UPDATE notifications
 SET
-    is_read = true,
+    is_read = true
 WHERE
     id = :id;
