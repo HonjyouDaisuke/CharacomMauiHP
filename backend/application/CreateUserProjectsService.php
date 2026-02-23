@@ -55,20 +55,32 @@ class CreateUserProjectsService
                 'success' => false,
                 'message' => 'User is already a member of the project.',
             ];
-        } else {
+        }
+        try { 
             // CREATE
             $res = $this->repo->create($toUserId, $projectId, $roleId);
-
-            if (!$res) {
-              return [
-                'success' => false,
-                'message' => 'Failed to invite user to project.',
-              ];
-            }
-            return [
-                'success' => true,
-                'message' => 'User invited to project successfully.',
-              ];
         }
+        catch (\PDOException $e) {
+          // 一意制約違反（競合による重複）
+          if (isset($e->errorInfo[1]) && $e->errorInfo[1] === 1062) {
+            return [
+              'success' => false,
+              'message' => 'User is already a member of the project.',
+            ];
+          }
+          throw $e;
+        }
+            
+        if (!$res) {
+          return [
+            'success' => false,
+            'message' => 'Failed to invite user to project.',
+          ];
+        }
+        return [
+          'success' => true,
+          'message' => 'User invited to project successfully.',
+        ];
+        
     }
 }

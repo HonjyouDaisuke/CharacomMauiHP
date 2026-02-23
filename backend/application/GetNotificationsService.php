@@ -18,7 +18,7 @@ class GetNotificationsService
         $this->repo = $repo;
     }
 
-    public function execute(string $userId): array
+    public function execute(string $userId): ?array
     {
         return $this->repo->getNotificationsByUserId($userId);
     }

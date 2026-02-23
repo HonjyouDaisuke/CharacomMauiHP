@@ -15,12 +15,12 @@ $id = $data['notification_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
+if (!$token || !$id)
 {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました invalid user info token:".$token." proFol:".$projectFolderId,
+    'message'  => "入力チェックでエラーが出ました。token または notification_id が未指定です。",
   ]);
   exit;
 } 
@@ -36,12 +36,12 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ましたinvalid user info",
   ]);
   exit;
 }
 
-// stroke_masterに保存
+// 通知を既読に更新
 $notificationsRepo = new NotificationsRepository($db);
 $updateNotificationRead = new UpdateNotificationReadService($notificationsRepo);
 $res = $updateNotificationRead->execute($id);
@@ -51,7 +51,7 @@ if ($res == false) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ましたinvalid user info",
   ]);
   exit;
 }

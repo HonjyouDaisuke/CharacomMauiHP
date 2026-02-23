@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS notifications;
 
 CREATE TABLE notifications (
     id CHAR(36) NOT NULL PRIMARY KEY DEFAULT (UUID()),
-    user_id CHAR(36),
-    type_id VARCHAR(36),
+    user_id CHAR(36) NOT NULL,
+    type_id VARCHAR(36) DEFAULT NULL,
     title VARCHAR(255),
     message TEXT,
     link_type VARCHAR(36) DEFAULT NULL,

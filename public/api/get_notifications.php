@@ -33,15 +33,8 @@ $repo = new NotificationsRepository($db);
 $getNotificationsService = new GetNotificationsService($repo);
 $notifications = $getNotificationsService->execute($userInfo['userId']);
 
-if (!$notifications)
-{
-  header('Content-Type: application/json; charset=utf-8');
-  echo json_encode([
-    'success' => false,
-    'message' => $success['message'] ?? " Failed to invite user to project.",
-  ]);
-  exit;
-}
+// 通知が存在しない場合は空配列で正常レスポンスを返す
+$notifications = $notifications ?? [];
 
 foreach ($notifications as &$item) {
     $item['is_read'] = $item['is_read'] ? true : false;

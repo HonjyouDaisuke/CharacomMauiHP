@@ -54,15 +54,15 @@ if (!$success['success'])
 // ユーザー名の取得
 $getUserInfoService = new GetUserInfoService($db, $config);
 $fromUserInfo = $getUserInfoService->GetUserInfo($userInfo['userId']);
-$fromUserName = $fromUserInfo->name ?? "Unknown User";
+$fromUserName = $fromUserInfo?->name ?? "Unknown User";
 
 $toUserInfo = $getUserInfoService->GetUserInfo($toUserId);
-$toUserName = $toUserInfo->name ?? "Unknown User";
+$toUserName = $toUserInfo?->name ?? "Unknown User";
 
 // プロジェクト名の取得
 $projectRepo = new ProjectRepository($db);
 $project = $projectRepo->getProjectDetails($projectId);
-$projectName = $project->name ?? "Unknown Project";
+$projectName = $project?->name ?? "Unknown Project";
 
 // Notificationsの挿入(招待相手)
 $notificationRepo = new NotificationsRepository($db);
@@ -76,9 +76,16 @@ $notificationData = new NotificationData(
   created_by: $userInfo['userId']
 );
 $insertNotificationResult = $insertNotificationService->execute($notificationData);
+// Notificationsの挿入エラーチェック
+if (!$insertNotificationResult['success']) {
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode(['success' => false, 'message' => $insertNotificationResult['message']]);
+  exit;
+}
+
 // Notificationsの挿入(自分用)
 $notificationData = new NotificationData(
-  user_id: $fromUserInfo->id,
+  user_id: $fromUserInfo->id ?? $userInfo['user_id'],
   type_id: 'system',
   title: "プロジェクトに招待しました。",
   message: $toUserName . "さんをプロジェクトに招待しました。プロジェクト名: $projectName 権限: $toRoleId",

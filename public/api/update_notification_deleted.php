@@ -15,12 +15,12 @@ $id = $data['notification_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
+if (!$token || !$id)
 {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました invalid user info",
+    'message'  => "入力チェックでエラーが出ました。token または notification_id が未指定です。",
   ]);
   exit;
 } 
@@ -51,7 +51,7 @@ if ($res == false) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info",
+    'message'  => "通知の削除処理でエラーが発生しました。",
   ]);
   exit;
 }
@@ -59,5 +59,5 @@ if ($res == false) {
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
   'success' => true,
-  'message'  => "通知を既読に変更しました。",
+  'message'  => "通知の削除処理でエラーが発生しました。",
 ]);

@@ -51,7 +51,7 @@ class NotificationsRepository
       ]);
     }
     
-    public function isExists(string $id): ?string
+    public function isExists(string $id): bool
     {
       $stmt = $this->db->prepare("SELECT id FROM notifications WHERE id=:id LIMIT 1");
       $stmt->execute([':id' => $id]);
