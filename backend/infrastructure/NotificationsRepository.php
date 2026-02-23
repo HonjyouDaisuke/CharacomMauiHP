@@ -40,6 +40,16 @@ class NotificationsRepository
         ':id' => $id,
       ]);
     }
+
+    public function isDeletedUpdate(string $id): bool
+    {
+      $sql = file_get_contents(__DIR__ . '/../sql/update_notification_is_deleted.sql');
+      $stmt = $this->db->prepare($sql);
+
+      return $stmt->execute([
+        ':id' => $id,
+      ]);
+    }
     
     public function isExists(string $id): ?string
     {

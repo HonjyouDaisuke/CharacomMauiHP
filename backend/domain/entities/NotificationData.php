@@ -11,6 +11,7 @@ class NotificationData
         public string $message = "",
         public string $link_type = "",
         public string $link_id = "",
+        public bool $is_deleted = false,
         public bool $is_read = false,
         public string $created_by = ""
     ){
