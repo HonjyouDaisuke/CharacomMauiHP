@@ -80,7 +80,7 @@ class NotificationsRepository
             return null;
         }
 
-        // 見つかったので project_id のリストを返す
+        // 見つかったので通知のリストを返す
         return $rows;
     }
 }
