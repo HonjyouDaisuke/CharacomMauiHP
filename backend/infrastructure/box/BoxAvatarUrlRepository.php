@@ -1,10 +1,9 @@
 <?php
+
 namespace Backend\Infrastructure\Box;
 
-class BoxAvatarUrlRepository
-{
-  public function GetAvatarImage(string $avatarUrl, string $accessToken): ?array 
-  {
+class BoxAvatarUrlRepository {
+  public function GetAvatarImage(string $avatarUrl, string $accessToken): ?array {
     // 1. 最初のリクエスト（302 → Location を受け取るため HEADER を取得する）
     $ch = curl_init($avatarUrl);
     curl_setopt_array($ch, [

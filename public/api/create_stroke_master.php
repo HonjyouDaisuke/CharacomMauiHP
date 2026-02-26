@@ -21,15 +21,14 @@ $token = $data['token'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
-{
+if (!$token) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました invalid user info token:".$token." proFol:".$projectFolderId,
+    'message'  => "入力チェックでエラーが出ました",
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
@@ -43,7 +42,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=" . $token . "\n userId:" . $userInfo['id'],
   ]);
   exit;
 }
@@ -52,14 +51,14 @@ $userId = $userInfo['userId'];
 
 $accessToken = $userInfo['boxAccessToken'];
 
-if(!$accessToken || $accessToken === "") {
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
-        'success' => false,
-        'message'  => "Box access token is missing for userId: ".$userId,
-    ]);
-    exit;
-} 
+if (!$accessToken || $accessToken === "") {
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'success' => false,
+    'message'  => "Box access token is missing for userId: " . $userId,
+  ]);
+  exit;
+}
 // Chara情報取得
 $boxFolderItems = new GetBoxFolderItemsService();
 $globalSettings = $globalSettingService->GetGlobalSetting();

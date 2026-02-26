@@ -1,4 +1,5 @@
 <?php
+
 namespace Backend\Application;
 
 use Backend\Infrastructure\Database;
@@ -9,17 +10,14 @@ use Backend\Application\BoxTokenService;
 use Backend\Infrastructure\NotificationsRepository;
 use Backend\Infrastructure\UserProjectsRepository;
 
-class GetNotificationsService
-{
-    private NotificationsRepository $repo;
-    
-    public function __construct(NotificationsRepository $repo)
-    {
-        $this->repo = $repo;
-    }
+class GetNotificationsService {
+  private NotificationsRepository $repo;
 
-    public function execute(string $userId): ?array
-    {
-        return $this->repo->getNotificationsByUserId($userId);
-    }
+  public function __construct(NotificationsRepository $repo) {
+    $this->repo = $repo;
+  }
+
+  public function execute(string $userId): ?array {
+    return $this->repo->getNotificationsByUserId($userId);
+  }
 }

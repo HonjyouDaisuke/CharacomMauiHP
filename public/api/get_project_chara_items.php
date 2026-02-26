@@ -40,18 +40,17 @@ $projectCharaItemsService = new GetProjectCharaItemsService($charaDataRepo);
 
 $charaDataItems = $projectCharaItemsService->getProjectCharaItems($project_id);
 
-if ($charaDataItems === null)
-{
+if ($charaDataItems === null) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message' => "There is no Items... projectId={$projectId}",
+    'message' => "There is no Items... projectId={$project_id}",
   ]);
   exit;
 }
 
 foreach ($charaDataItems as &$item) {
-    $item['is_selected'] = $item['is_selected'] ? true : false;
+  $item['is_selected'] = $item['is_selected'] ? true : false;
 }
 
 header('Content-Type: application/json; charset=utf-8');

@@ -7,6 +7,7 @@ use Backend\Infrastructure\Database;
 use Backend\Application\GetGlobalSettingService;
 use Backend\Application\GetUserInfoService;
 use Backend\Infrastructure\StandardMasterRepository;
+
 set_time_limit(120);
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
@@ -14,15 +15,14 @@ $token = $data['token'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
-{
+if (!$token) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました invalid user info token:".$token." proFol:".$projectFolderId,
+    'message'  => "入力チェックでエラーが出ました",
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
@@ -36,7 +36,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=" . $token . "\n userId:" . $userInfo['id'],
   ]);
   exit;
 }

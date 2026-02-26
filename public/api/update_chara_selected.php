@@ -14,15 +14,14 @@ $isSelected = $data['is_selected'] ?? false;
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
-{
+if (!$token) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました invalid user info token:".$token." proFol:".$projectFolderId,
+    'message'  => "入力チェックでエラーが出ました",
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
@@ -35,7 +34,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=" . $token . "\n userId:" . $userInfo['id'],
   ]);
   exit;
 }

@@ -37,8 +37,7 @@ $userProjectsRepo = new UserProjectsRepository($db);
 $userProjectsService = new GetUserProjectsService($userProjectsRepo);
 $projects = $userProjectsService->getUserProjects($userId);
 
-if ($projects === null)
-{
+if ($projects === null) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,

@@ -15,15 +15,14 @@ $id = $data['notification_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token || !$id)
-{
+if (!$token || !$id) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
     'message'  => "入力チェックでエラーが出ました。token または notification_id が未指定です。",
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Backend\Application;
 
 use Backend\Infrastructure\Database;
@@ -9,17 +10,14 @@ use Backend\Application\BoxTokenService;
 use Backend\Infrastructure\UserProjectsRepository;
 use Backend\Infrastructure\UserRolesRepository;
 
-class GetUserRolesService
-{
-    private UserRolesRepository $repo;
-    
-    public function __construct(UserRolesRepository $repo)
-    {
-        $this->repo = $repo;
-    }
+class GetUserRolesService {
+  private UserRolesRepository $repo;
 
-    public function getUserRoles(): ?array
-    {
-        return $this->repo->getUserRoles();
-    }
+  public function __construct(UserRolesRepository $repo) {
+    $this->repo = $repo;
+  }
+
+  public function getUserRoles(): ?array {
+    return $this->repo->getUserRoles();
+  }
 }

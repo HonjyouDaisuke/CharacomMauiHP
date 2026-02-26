@@ -41,8 +41,7 @@ $userProjectRepo = new UserProjectsRepository($db);
 $userProjectsService = new CreateUserProjectsService($userProjectRepo);
 $success = $userProjectsService->inviteToProject($toUserId, $projectId, $toRoleId);
 
-if (!$success['success'])
-{
+if (!$success['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -95,8 +94,7 @@ $notificationData = new NotificationData(
 $insertNotificationResult = $insertNotificationService->execute($notificationData);
 
 // Notificationsの挿入エラーチェック
-if (!$insertNotificationResult['success'])
-{
+if (!$insertNotificationResult['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,

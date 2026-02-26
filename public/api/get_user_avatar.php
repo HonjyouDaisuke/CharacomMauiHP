@@ -30,8 +30,7 @@ if (!$userInfo['success']) {
 $userId = $userInfo['userId'];
 $userInfo = $userInfoService->GetUserInfo($userId);
 
-if ($userInfo === null || empty($userInfo->picture_url))
-{
+if ($userInfo === null || empty($userInfo->picture_url)) {
   echo json_encode([
     'success' => false,
     'message'  => "user id can't fetch picture_url userId = {$userId}",

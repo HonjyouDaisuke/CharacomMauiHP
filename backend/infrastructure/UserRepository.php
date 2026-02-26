@@ -1,4 +1,5 @@
 <?php
+
 namespace Backend\Infrastructure;
 
 use Backend\Domain\Entities\User;
@@ -7,117 +8,108 @@ use Backend\Infrastructure\Box\BoxAvatarUrlRepository;
 
 use PDO;
 
-class UserRepository
-{
-    private PDO $db;
-    private EncryptionServiceInterface $enc;
+class UserRepository {
+  private PDO $db;
+  private EncryptionServiceInterface $enc;
 
-    public function __construct(Database $database, EncryptionServiceInterface $enc)
-    {
-        $this->db = $database->getConnection();
-        $this->enc = $enc;
+  public function __construct(Database $database, EncryptionServiceInterface $enc) {
+    $this->db = $database->getConnection();
+    $this->enc = $enc;
+  }
+
+  public function create(User $user): bool {
+    $sql = file_get_contents(__DIR__ . '/../sql/create_user.sql');
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+      ':id' => $user->id,
+      ':name' => $user->name,
+      ':email' => $user->email,
+      ':picture_url' => $user->picture_url,
+      ':box_user_id' => $user->box_user_id,
+      ':box_access_token' => $this->enc->encrypt($user->box_access_token),
+      ':box_refresh_token' => $this->enc->encrypt($user->box_refresh_token),
+      ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s'),
+      ':role_id' => $user->role_id
+    ]);
+  }
+
+  public function update(User $user): bool {
+    $sql = file_get_contents(__DIR__ . '/../sql/update_user.sql');
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+      ':id' => $user->id,
+      ':box_user_id' => $user->box_user_id,
+      ':box_access_token' => $this->enc->encrypt($user->box_access_token),
+      ':box_refresh_token' => $this->enc->encrypt($user->box_refresh_token),
+      ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s')
+    ]);
+  }
+
+  public function updateUserRole(string $userId, string $userRoleId): bool {
+    if (!$this->exists($userId)) {
+      return false;
     }
 
-    public function create(User $user): bool
-    {
-        $sql = file_get_contents(__DIR__ . '/../sql/create_user.sql');
-        $stmt = $this->db->prepare($sql);
+    $sql = file_get_contents(__DIR__ . '/../sql/update_user_userrole.sql');
+    $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute([
-            ':id' => $user->id,
-            ':name' => $user->name,
-            ':email' => $user->email,
-            ':picture_url' => $user->picture_url,
-            ':box_user_id' => $user->box_user_id,
-            ':box_access_token' => $this->enc->encrypt($user->box_access_token),
-            ':box_refresh_token' => $this->enc->encrypt($user->box_refresh_token),
-            ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s'),
-            ':role_id' => $user->role_id
-        ]);
+    return $stmt->execute([
+      ':id' => $userId,
+      ':role_id' => $userRoleId
+    ]);
+  }
+
+  public function exists(string $id): bool {
+    $stmt = $this->db->prepare("SELECT id FROM users WHERE id=:id LIMIT 1");
+    $stmt->execute([':id' => $id]);
+
+    return $stmt->fetch() !== false;
+  }
+
+  public function getById(string $id): ?User {
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+    $stmt->execute([':id' => $id]);
+    $row = $stmt->fetch();
+    if (!$row) return null;
+
+    return new User(
+      id: $row['id'],
+      name: $row['name'],
+      email: $row['email'],
+      picture_url: $row['picture_url'],
+      box_user_id: $row['box_user_id'],
+      box_access_token: $row['box_access_token'] ?? '',
+      box_refresh_token: $row['box_refresh_token'] ?? '',
+      token_expires_at: new \DateTime($row['token_expires_at'] ?? 'now'),
+      role_id: $row['role_id'] ?? ''
+    );
+  }
+
+  public function updateUserInfo(string $userId, string $userName, string $email, string $avatarUrl): bool {
+    $sql = file_get_contents(__DIR__ . '/../sql/update_user_info.sql');
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+      ':id' => $userId,
+      ':name' => $userName,
+      ':email' => $email,
+      ':picture_url' => $avatarUrl,
+    ]);
+  }
+
+  public function getAllUsers(): ?array {
+    $sql = file_get_contents(__DIR__ . '/../sql/get_all_users.sql');
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (empty($rows)) {
+      return null;
     }
 
-    public function update(User $user): bool
-    {
-        $sql = file_get_contents(__DIR__ . '/../sql/update_user.sql');
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ':id' => $user->id,
-            ':box_user_id' => $user->box_user_id,
-            ':box_access_token' => $this->enc->encrypt($user->box_access_token),
-            ':box_refresh_token' => $this->enc->encrypt($user->box_refresh_token),
-            ':token_expires_at' => $user->token_expires_at->format('Y-m-d H:i:s')
-        ]);
-    }
-
-    public function updateUserRole(string $userId, string $userRoleId): bool
-    {
-        if (!$this->exists($userId)) {
-            return false;
-        }
-        
-        $sql = file_get_contents(__DIR__ . '/../sql/update_user_userrole.sql');
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ':id' => $userId,
-            ':role_id' => $userRoleId
-        ]);
-    }
-
-    public function exists(string $id): bool
-    {
-        $stmt = $this->db->prepare("SELECT id FROM users WHERE id=:id LIMIT 1");
-        $stmt->execute([':id' => $id]);
-
-        return $stmt->fetch() !== false;
-    }
-
-    public function getById(string $id): ?User
-    {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch();
-        if (!$row) return null;
-
-        return new User(
-            id: $row['id'],
-            name: $row['name'],
-            email: $row['email'],
-            picture_url: $row['picture_url'],
-            box_user_id: $row['box_user_id'],
-            box_access_token: $row['box_access_token'] ?? '',
-            box_refresh_token: $row['box_refresh_token'] ?? '',
-            token_expires_at: new \DateTime($row['token_expires_at'] ?? 'now'),
-            role_id: $row['role_id'] ?? ''
-        );
-    }
-
-    public function updateUserInfo(string $userId, string $userName, string $email, string $avatarUrl): bool
-    {
-        $sql = file_get_contents(__DIR__ . '/../sql/update_user_info.sql');
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ':id' => $userId,
-            ':name' => $userName,
-            ':email' => $email,
-            ':picture_url' => $avatarUrl,
-        ]);
-    }
-
-    public function getAllUsers(): ?array
-    {
-        $sql = file_get_contents(__DIR__ . '/../sql/get_all_users.sql');
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($rows)) {
-            return null;
-        }
-
-        return $rows;
-    }
+    return $rows;
+  }
 }

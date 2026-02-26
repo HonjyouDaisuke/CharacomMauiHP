@@ -17,16 +17,15 @@ $projectId = $data['project_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token || !$projectId)
-{
+if (!$token || !$projectId) {
   header('Content-Type: application/json; charset=utf-8');
   http_response_code(400);
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました projectId:".$projectId,
+    'message'  => "入力チェックでエラーが出ました projectId:" . $projectId,
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
@@ -39,7 +38,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ました userId:" . $userInfo['id'],
   ]);
   exit;
 }
@@ -54,7 +53,7 @@ if ($projectRole === null || $projectRole === 'unapproved') {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "プロジェクトの閲覧権限がありません projectId:".$projectId." userId:".$userInfo['userId']." role:".$projectRole,
+    'message'  => "プロジェクトの閲覧権限がありません projectId:" . $projectId . " userId:" . $userInfo['userId'] . " role:" . $projectRole,
   ]);
   exit;
 }
@@ -68,7 +67,7 @@ if (!$res) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "プロジェクトの削除でエラーが出ました projectId:".$projectId,
+    'message'  => "プロジェクトの削除でエラーが出ました projectId:" . $projectId,
   ]);
   exit;
 }
@@ -89,6 +88,6 @@ $responseData = [
 http_response_code(200);
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
-    'success' => true,
-    'data'  => $responseData
+  'success' => true,
+  'data'  => $responseData
 ]);

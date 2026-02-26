@@ -19,21 +19,20 @@ $token = $data['token'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
-{
+if (!$token) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました token:".$token,
+    'message'  => "入力チェックでエラーが出ました token:" . $token,
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
 $crypto = new OpenSSLEncryptionService(
-    base64_decode($config['enc_key']),  // decode して 32 バイトに
-    base64_decode($config['enc_iv'])   // decode して 16 バイトに
+  base64_decode($config['enc_key']),  // decode して 32 バイトに
+  base64_decode($config['enc_iv'])   // decode して 16 バイトに
 );
 
 // User認証 & User情報取得
@@ -44,13 +43,13 @@ if (!$userInfo['success'] || !$fromUserId) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました invalid user info\nuserId:".$userInfo['userId']." fromUserId:".$fromUserId,
+    'message'  => "ユーザー認証でエラーが出ました invalid user info\nuserId:" . $userInfo['userId'] . " fromUserId:" . $fromUserId,
   ]);
   exit;
 }
 
 // proxy中かどうかのチェック
-if (!$userInfo['isProxy']){
+if (!$userInfo['isProxy']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -65,7 +64,7 @@ if (!$fromUser) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "fromユーザー情報取得でエラーが出ました fromUserId:".$fromUserId,
+    'message'  => "fromユーザー情報取得でエラーが出ました fromUserId:" . $fromUserId,
   ]);
   exit;
 }
@@ -74,11 +73,11 @@ if (!$fromUser) {
 $proxyRepo = new ProxyLoginRepository($db, $crypto);
 $deleteService = new DeleteProxyLoginService($proxyRepo);
 $success = $deleteService->execute($fromUserId);
-if (!$success['success']){
+if (!$success['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "Proxyログイン情報削除でエラーが出ました: ".($success['message'] ?? ''),
+    'message'  => "Proxyログイン情報削除でエラーが出ました: " . ($success['message'] ?? ''),
   ]);
   exit;
 }
@@ -94,5 +93,3 @@ echo json_encode([
   'refresh_token' => $token['refreshToken'],
   'expire_at'     => $token['expireAt'],
 ]);
-
-

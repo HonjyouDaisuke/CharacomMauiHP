@@ -41,15 +41,15 @@ $usecase = new FetchBoxFileItemService($repo);
 // ✅ 実行
 $result = $usecase->FetchBoxFileItem($accessToken, $fileId);
 if (!$result['success']) {
-    // JSON エラーで返す
-    header("Content-Type: application/json", true, $result['status'] ?: 500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Failed to fetch file from Box',
-        'status' => $result['status'],
-        'error' => $result['error']
-    ]);
-    exit;
+  // JSON エラーで返す
+  header("Content-Type: application/json", true, $result['status'] ?: 500);
+  echo json_encode([
+    'success' => false,
+    'message' => 'Failed to fetch file from Box',
+    'status' => $result['status'],
+    'error' => $result['error']
+  ]);
+  exit;
 }
 
 // 画像バイナリを返す

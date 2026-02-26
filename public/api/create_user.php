@@ -30,18 +30,18 @@ $name             = $input['name'] ?? '';
 $box_user_id      = $input['box_user_id'] ?? '';
 $picture_url      = $input['picture_url'] ?? '';
 $box_access_token = $input['box_access_token'] ?? '';
-$box_refresh_token= $input['box_refresh_token'] ?? '';
+$box_refresh_token = $input['box_refresh_token'] ?? '';
 
 if (!$email || !$id) {
-    echo json_encode(['success' => false, 'message' => 'Invalid input']);
-    exit;
+  echo json_encode(['success' => false, 'message' => 'Invalid input']);
+  exit;
 }
 
 // ✅ DI（依存注入）構築
 $db  = new Database($config);
 $crypto = new OpenSSLEncryptionService(
-    base64_decode($config['enc_key']),  // decode して 32 バイトに
-    base64_decode($config['enc_iv'])   // decode して 16 バイトに
+  base64_decode($config['enc_key']),  // decode して 32 バイトに
+  base64_decode($config['enc_iv'])   // decode して 16 バイトに
 );
 
 $repo = new UserRepository($db, $crypto);  // ← Repo が暗号化を担当
@@ -51,13 +51,13 @@ $tokenService = new GenerateTokenService($config['jwt_secret']);
 
 // ✅ エンティティ
 $_user = new User(
-    id: $id,
-    name: $name,
-    email: $email,
-    picture_url: $picture_url,
-    box_access_token: $box_access_token,
-    box_user_id: $box_user_id,
-    box_refresh_token: $box_refresh_token,
+  id: $id,
+  name: $name,
+  email: $email,
+  picture_url: $picture_url,
+  box_access_token: $box_access_token,
+  box_user_id: $box_user_id,
+  box_refresh_token: $box_refresh_token,
 );
 
 // ✅ usecase 実行
@@ -66,11 +66,11 @@ $res = $usecase->execute($_user);
 // ✅ JWT 生成
 if (!empty($res['success']) && $res['success'] === true) {
 
-    $token = $tokenService->execute($_user);
+  $token = $tokenService->execute($_user);
 
-    $res['access_token'] = $token['accessToken'];
-    $res['refresh_token'] = $token['refreshToken'];
-    $res['expire_at']     = $token['expireAt'];
+  $res['access_token'] = $token['accessToken'];
+  $res['refresh_token'] = $token['refreshToken'];
+  $res['expire_at']     = $token['expireAt'];
 }
 
 // ✅ レスポンス

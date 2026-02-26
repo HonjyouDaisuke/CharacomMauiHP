@@ -16,15 +16,14 @@ $projectId = $data['project_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token || !$projectId)
-{
+if (!$token || !$projectId) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました token:".$token." projectId:".$projectId,
+    'message'  => "入力チェックでエラーが出ました token:" . $token . " projectId:" . $projectId,
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
@@ -36,7 +35,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました invalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ました invalid user info\ntoken=" . $token . "\n userId:" . $userInfo['id'],
   ]);
   exit;
 }
@@ -50,7 +49,7 @@ if ($projectRole !== 'admin' && $projectRole !== 'owner') {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "プロジェクトの削除権限がありません projectId:".$projectId." userId:".$userInfo['userId']." role:".$projectRole,
+    'message'  => "プロジェクトの削除権限がありません projectId:" . $projectId . " userId:" . $userInfo['userId'] . " role:" . $projectRole,
   ]);
   exit;
 }
@@ -61,9 +60,9 @@ $userProjectsRepo = new UserProjectsRepository($db);
 $charaDataRepo = new CharaDataRepository($db);
 
 $usecase = new DeleteProjectService(
-    $projectRepo,
-    $userProjectsRepo,
-    $charaDataRepo
+  $projectRepo,
+  $userProjectsRepo,
+  $charaDataRepo
 );
 
 $res = $usecase->execute($projectId);
@@ -72,12 +71,12 @@ if (!$res) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "プロジェクトの削除でエラーが出ました projectId:".$projectId,
+    'message'  => "プロジェクトの削除でエラーが出ました projectId:" . $projectId,
   ]);
   exit;
 }
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
-    'success' => true,
-    'message'  => "プロジェクトを削除しました projectId:".$projectId,
+  'success' => true,
+  'message'  => "プロジェクトを削除しました projectId:" . $projectId,
 ]);

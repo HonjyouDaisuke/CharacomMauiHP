@@ -1,20 +1,18 @@
 <?php
+
 namespace Backend\Application;
 
 use Backend\Infrastructure\ProjectRoleRepository;
 use Backend\Domain\Entities\ProjectDetails;
 
-class GetProjectRolesService
-{
-    private ProjectRoleRepository $repo;
-    
-    public function __construct(ProjectRoleRepository $repo)
-    {
-        $this->repo = $repo;
-    }
+class GetProjectRolesService {
+  private ProjectRoleRepository $repo;
 
-    public function getProjectRoles(): ?array
-    {
-        return $this->repo->getProjectRoles();
-    }
+  public function __construct(ProjectRoleRepository $repo) {
+    $this->repo = $repo;
+  }
+
+  public function getProjectRoles(): ?array {
+    return $this->repo->getProjectRoles();
+  }
 }
