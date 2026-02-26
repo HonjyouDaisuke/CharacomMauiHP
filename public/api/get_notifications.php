@@ -37,7 +37,7 @@ $notifications = $getNotificationsService->execute($userInfo['userId']);
 $notifications = $notifications ?? [];
 
 foreach ($notifications as &$item) {
-    $item['is_read'] = $item['is_read'] ? true : false;
+  $item['is_read'] = $item['is_read'] ? true : false;
 }
 
 header('Content-Type: application/json; charset=utf-8');

@@ -33,8 +33,7 @@ if (!$userInfo['success']) {
 $userId = $userInfo['userId'];
 $userInfo = $userInfoService->GetUserInfo($userId);
 
-if ($userInfo === null)
-{
+if ($userInfo === null) {
   echo json_encode([
     'success' => false,
     'message'  => "invalid user info",
@@ -42,11 +41,10 @@ if ($userInfo === null)
   exit;
 }
 
-if (!$userInfo->id || $userInfo->id == "")
-{
+if (!$userInfo->id || $userInfo->id == "") {
   echo json_encode([
     'success' => false,
-    'message' => "user id can't fetch userId = ".$userInfo->id,
+    'message' => "user id can't fetch userId = " . $userInfo->id,
   ]);
 }
 

@@ -13,21 +13,20 @@ $token = $data['token'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token)
-{
+if (!$token) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
     'message'  => "入力チェックでエラーが出ました",
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
 $crypto = new OpenSSLEncryptionService(
-    base64_decode($config['enc_key']),  // decode して 32 バイトに
-    base64_decode($config['enc_iv'])   // decode して 16 バイトに
+  base64_decode($config['enc_key']),  // decode して 32 バイトに
+  base64_decode($config['enc_iv'])   // decode して 16 バイトに
 );
 
 // User認証 & User情報取得
@@ -37,12 +36,12 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ました: ".($userInfo['message'] ?? 'invalid token'),
+    'message'  => "ユーザー認証でエラーが出ました: " . ($userInfo['message'] ?? 'invalid token'),
   ]);
   exit;
 }
 $executeUser = $userInfoService->GetUserInfo($userInfo['userId']);
-if (!$executeUser || $executeUser->role_id != "admin"){
+if (!$executeUser || $executeUser->role_id != "admin") {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -65,6 +64,6 @@ if ($res === null) {
 }
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
-    'success' => true,
-    'users'  => $res,
+  'success' => true,
+  'users'  => $res,
 ]);

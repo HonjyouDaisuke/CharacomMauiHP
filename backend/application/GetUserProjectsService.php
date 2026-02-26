@@ -1,4 +1,5 @@
 <?php
+
 namespace Backend\Application;
 
 use Backend\Infrastructure\Database;
@@ -8,22 +9,18 @@ use Backend\Application\ValidateTokenService;
 use Backend\Application\BoxTokenService;
 use Backend\Infrastructure\UserProjectsRepository;
 
-class GetUserProjectsService
-{
-    private UserProjectsRepository $repo;
-    
-    public function __construct(UserProjectsRepository $repo)
-    {
-        $this->repo = $repo;
-    }
+class GetUserProjectsService {
+  private UserProjectsRepository $repo;
 
-    public function getUserProjects(string $userId): array
-    {
-        return $this->repo->getUserProjectsInfo($userId);
-    }
+  public function __construct(UserProjectsRepository $repo) {
+    $this->repo = $repo;
+  }
 
-    public function getProjectRole(string $userId, string $projectId): ?string
-    {
-        return $this->repo->getUserProjectRole($userId, $projectId);
-    }
+  public function getUserProjects(string $userId): array {
+    return $this->repo->getUserProjectsInfo($userId);
+  }
+
+  public function getProjectRole(string $userId, string $projectId): ?string {
+    return $this->repo->getUserProjectRole($userId, $projectId);
+  }
 }

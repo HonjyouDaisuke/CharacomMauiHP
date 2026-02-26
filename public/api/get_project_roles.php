@@ -33,8 +33,7 @@ $projectRolesRepo = new ProjectRoleRepository($db);
 $getProjectRolesService = new GetProjectRolesService($projectRolesRepo);
 $roles = $getProjectRolesService->getProjectRoles();
 
-if ($roles === null)
-{
+if ($roles === null) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,

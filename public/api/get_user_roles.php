@@ -16,8 +16,8 @@ $config = require __DIR__ . '/../../backend/config/env.local.php';
 // DBインスタンス
 $db = new Database($config);
 $crypto = new OpenSSLEncryptionService(
-    base64_decode($config['enc_key']),  // decode して 32 バイトに
-    base64_decode($config['enc_iv'])   // decode して 16 バイトに
+  base64_decode($config['enc_key']),  // decode して 32 バイトに
+  base64_decode($config['enc_iv'])   // decode して 16 バイトに
 );
 // User認証 & User情報取得
 // UseCase
@@ -39,8 +39,7 @@ $userRolesRepo = new UserRolesRepository($db, $crypto);
 $userRolesService = new GetUserRolesService($userRolesRepo);
 $roles = $userRolesService->getUserRoles();
 
-if ($roles === null)
-{
+if ($roles === null) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,

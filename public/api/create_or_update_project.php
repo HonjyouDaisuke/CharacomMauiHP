@@ -23,15 +23,14 @@ $projectDescription = $data['description'] ?? null;
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token || !$projectFolderId || !$charaFolderId || !$projectName || !$projectDescription)
-{
+if (!$token || !$projectFolderId || !$charaFolderId || !$projectName || !$projectDescription) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "入力チェックでエラーが出ました invalid user info token:".$token." proFol:".$projectFolderId,
+    'message'  => "入力チェックでエラーが出ました invalid user info token:" . $token . " proFol:" . $projectFolderId,
   ]);
   exit;
-} 
+}
 
 // DBインスタンス
 $db = new Database($config);
@@ -45,7 +44,7 @@ if (!$userInfo['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=".$token."\n userId:".$userInfo['id'],
+    'message'  => "ユーザー認証でエラーが出ましたinvalid user info\ntoken=" . $token . "\n userId:" . $userInfo['id'],
   ]);
   exit;
 }
@@ -60,17 +59,16 @@ $repo = new ProjectRepository($db);
 $usecase = new CreateOrUpdateProjectService($repo);
 // ✅ エンティティ
 $_project = new Project(
-    id: "",
-    name: $projectName,
-    description: $projectDescription,
-    project_folder_id: $projectFolderId,
-    chara_folder_id: $charaFolderId,
-    created_by: $userId,
+  id: "",
+  name: $projectName,
+  description: $projectDescription,
+  project_folder_id: $projectFolderId,
+  chara_folder_id: $charaFolderId,
+  created_by: $userId,
 );
 
 $res = $usecase->execute($_project);
-if(!$res['success'])
-{
+if (!$res['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode($res);
   exit;

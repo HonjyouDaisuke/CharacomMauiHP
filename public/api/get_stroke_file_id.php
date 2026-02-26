@@ -39,8 +39,7 @@ $repo = new StrokeMasterRepository($db);
 $usecase = new GetStrokeFileId($repo);
 $fileId = $usecase->execute($charaName);
 
-if ($fileId === null)
-{
+if ($fileId === null) {
   echo json_encode([
     'success' => false,
     'message'  => "file id not found",

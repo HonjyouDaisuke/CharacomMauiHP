@@ -16,8 +16,7 @@ $toUserId = $data['to_user_id'] ?? '';
 $config = require __DIR__ . '/../../backend/config/env.local.php';
 
 // 入力チェック
-if (!$token || !$toUserId)
-{
+if (!$token || !$toUserId) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -29,8 +28,8 @@ if (!$token || !$toUserId)
 // DBインスタンス
 $db = new Database($config);
 $crypto = new OpenSSLEncryptionService(
-    base64_decode($config['enc_key']),  // decode して 32 バイトに
-    base64_decode($config['enc_iv'])   // decode して 16 バイトに
+  base64_decode($config['enc_key']),  // decode して 32 バイトに
+  base64_decode($config['enc_iv'])   // decode して 16 バイトに
 );
 
 // User認証 & User情報取得
@@ -58,7 +57,7 @@ if (!$fromUser || !$toUser) {
   exit;
 }
 
-if ($fromUser->role_id !== "admin"){
+if ($fromUser->role_id !== "admin") {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
@@ -87,7 +86,7 @@ if (!$res['success']) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
-    'message'  => "Proxyログイン情報作成でエラーが出ました: ".($res['message'] ?? ''),
+    'message'  => "Proxyログイン情報作成でエラーが出ました: " . ($res['message'] ?? ''),
   ]);
   exit;
 }
@@ -101,5 +100,3 @@ echo json_encode([
   'refresh_token' => $token['refreshToken'],
   'expire_at'     => $token['expireAt'],
 ]);
-
-

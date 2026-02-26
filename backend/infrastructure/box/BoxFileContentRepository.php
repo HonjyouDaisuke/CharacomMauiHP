@@ -1,12 +1,11 @@
 <?php
+
 namespace Backend\Infrastructure\Box;
 
-class BoxFileContentRepository
-{
+class BoxFileContentRepository {
   private string $baseUrl = "https://api.box.com/2.0";
 
-  public function FetchFileContent(string $accessToken, string $fileId): array
-  {
+  public function FetchFileContent(string $accessToken, string $fileId): array {
     $url = "{$this->baseUrl}/files/{$fileId}/content";
 
     $ch = curl_init($url);
@@ -33,8 +32,7 @@ class BoxFileContentRepository
     ];
   }
 
-  public function FetchThumbnailContent(string $accessToken, string $fileId, int $width, int $height): array
-  {
+  public function FetchThumbnailContent(string $accessToken, string $fileId, int $width, int $height): array {
     $url = "{$this->baseUrl}/files/{$fileId}/thumbnail.png?min_height={$height}&min_width={$width}";
 
     $ch = curl_init($url);

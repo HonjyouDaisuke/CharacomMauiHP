@@ -16,8 +16,7 @@ $userInfoService = new GetUserInfoService($db, $config);
 
 $userInfo = $userInfoService->GetUserId($token);
 
-if ($userInfo === null)
-{
+if ($userInfo === null) {
   header('Content-Type: application/json; charset=utf-8');
   echo json_encode([
     'success' => false,
