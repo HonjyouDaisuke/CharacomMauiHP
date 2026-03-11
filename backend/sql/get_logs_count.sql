@@ -1,0 +1,6 @@
+SELECT COUNT(*)
+FROM app_logs
+WHERE 1=1
+--FROM_CONDITION--
+--TO_CONDITION--
+;
