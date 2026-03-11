@@ -14,11 +14,11 @@ $data = json_decode(file_get_contents('php://input'), true);
 $token = $data['token'] ?? '';
 $from = $data['from'] ?? '';
 $to = $data['to'] ?? '';
-$page = (int)($data['page'] ?? 1);
-$limit = (int)($data['limit'] ?? 50);
+$page = max(1, (int)($data['page'] ?? 1));
+$limit = min(100, max(1, (int)($data['limit'] ?? 50)));
 $offset = ($page - 1) * $limit;
 $config = require __DIR__ . '/../../backend/config/env.local.php';
-
+$offset = ($page - 1) * $limit;
 // 入力チェック
 if (!$token) {
   header('Content-Type: application/json; charset=utf-8');

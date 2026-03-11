@@ -36,7 +36,6 @@ class LogRepository {
   public function fetch(?string $from, ?string $to, int $limit, int $offset): ?array {
     try {
       $sql = file_get_contents(__DIR__ . '/../sql/get_logs.sql');
-      $stmt = $this->db->prepare($sql);
 
       $params = [];
 
@@ -77,7 +76,6 @@ class LogRepository {
   public function getCount(?string $from, ?string $to): int {
     try {
       $sql = file_get_contents(__DIR__ . '/../sql/get_logs_count.sql');
-      $stmt = $this->db->prepare($sql);
 
       $params = [];
 

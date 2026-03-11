@@ -7,6 +7,14 @@ use Backend\Application\InsertLogService;
 use Backend\Domain\Entities\LogData;
 use Backend\Infrastructure\LogRepository;
 
+// POSTメソッドの検証
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+  http_response_code(405);
+  exit;
+}
+
 // POST情報読み取り
 $data = json_decode(file_get_contents('php://input'), true);
 
