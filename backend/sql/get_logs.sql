@@ -11,5 +11,5 @@ FROM app_logs
 WHERE 1=1
 --FROM_CONDITION--
 --TO_CONDITION--
-ORDER BY created_at DESC
+ORDER BY created_at DESC, id DESC
 LIMIT :limit OFFSET :offset;
