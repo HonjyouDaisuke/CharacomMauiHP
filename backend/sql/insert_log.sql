@@ -1,0 +1,20 @@
+INSERT INTO app_logs
+(
+  level,
+  user_id,
+  screen,
+  action,
+  message,
+  data,
+  correlation_id
+)
+VALUES
+(
+  :level,
+  :user_id,
+  :screen,
+  :action,
+  :message,
+  :data,
+  :correlation_id
+);
