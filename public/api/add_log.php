@@ -14,6 +14,7 @@ $token = $data['token'] ?? '';
 $logInput = $data['log_data'] ?? null;
 
 if (!$token || !$logInput) {
+  header('Content-Type: application/json; charset=utf-8');
   echo json_encode(['success' => false, 'message' => 'Invalid request']);
   exit;
 }
